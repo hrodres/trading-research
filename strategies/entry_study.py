@@ -19,12 +19,6 @@ Variants de ENTRADA (mismos indicadores base cuando aplica):
   - EntryVolConfirm: EMA20>EMA50 + volumen > 1.5x media 20v
   - EntryMeanRev   : RSI<30 en rango (cierre < EMA50)  [contraste: contra-tendencia]
 
-  [NOTA FORENSE] EntryV9Style es UNA SOLA variant aislada, anadida a peticion del
-  usuario (03:46 UTC) para cerrar la duda sobre la senal de entrada de v9. NO es
-  parte de la busqueda de edge del proyecto y queda FUERA de VARIANTS por defecto
-  (ver scripts/entry_study.py). Resultado: casi inerte (5 trades/5 anos, PF 0.0).
-  No usar como candidata en Fase D ni en ningun estudio canonico.
-
 Metodo OOS: 5 ventanas anuales (2021-2025), 9 pares, sizing fijo 100 USDT,
 fees 0.001. Sin fitting en IS -> todo OOS por construccion (evita overfit).
 
@@ -153,51 +147,4 @@ class EntryMeanRev(EntryStudyBase):
             & (dataframe["volume"] > 0),
             "enter_long",
         ] = 1
-        return dataframe
-
-
-class EntryV9Style(EntryStudyBase):
-    """ESTILO DE ENTRADA DEL BOT v9 — VARIANT FORENSE (NO CANONICA).
-
-    Anadida a peticion del usuario (03:46 UTC) para cerrar una duda sobre v9.
-    NO forma parte de la busqueda de edge del proyecto: queda FUERA de VARIANTS
-    por defecto en scripts/entry_study.py. Resultado forense ya documentado en
-    results/entrystudy_v9style.json (CASI INERTE: 5 trades en 5 anos, PF 0.0, win 0%).
-    No usar como candidata en Fase D ni en estudios canonicos.
-
-    Replica el *estilo* de `evaluate_long_entry` de v9: entra LONG cuando
-    >=2 de 3 senales disparan (score_bull). NO es el sistema v9 (sin OCO,
-    sin testnet/Binance, sin perfiles de riesgo): solo la senal de entrada,
-    corriendo en freqtrade con datos Coinbase 2h y el exit comun de Fase C.
-","""
-    name = "EntryV9Style"
-
-    def populate_indicators(self, dataframe, metadata):
-        dataframe = super().populate_indicators(dataframe, metadata)
-        dataframe["sma20"] = ta.SMA(dataframe, timeperiod=20)
-        dataframe["support50"] = dataframe["low"].rolling(50).min()
-        # engulfing components
-        po = dataframe["open"].shift(1)
-        pc = dataframe["close"].shift(1)
-        co = dataframe["open"]
-        cc = dataframe["close"]
-        bull_engulf = (po > pc) & (cc > co) & (co <= pc) & (cc >= po)
-        avg_vol = dataframe["volume"].rolling(21).mean().shift(1)
-        vol_ok = dataframe["volume"] >= avg_vol * 1.2
-        dataframe["engulf"] = bull_engulf & (dataframe["rsi"] <= 40) & vol_ok
-        return dataframe
-
-    def populate_entry_trend(self, dataframe, metadata):
-        momentum = (
-            (dataframe["close"] > dataframe["sma20"])
-            & (dataframe["rsi"] >= 45)
-            & (dataframe["rsi"] <= 65)
-        )
-        vol_support = (
-            (dataframe["support50"] > 0)
-            & (dataframe["close"] >= dataframe["support50"] * 0.99)
-            & (dataframe["close"] <= dataframe["support50"] * 1.01)
-        )
-        score = momentum.astype(int) + vol_support.astype(int) + dataframe["engulf"].astype(int)
-        dataframe.loc[(score >= 2) & (dataframe["volume"] > 0), "enter_long"] = 1
         return dataframe
