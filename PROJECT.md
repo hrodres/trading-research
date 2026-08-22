@@ -85,7 +85,7 @@ con drawdown acotado. El edge debe ser **real y robusto**, no un artefacto de ov
 - **Modelo:** `hy3-free` para análisis/interactivo (este chat). El cron de v9 (`auto-trade-v9`, deepseek-v4-flash) **no se toca**.
 - **Sin acciones en vivo:** no órdenes reales, no crear repos externos, sin OK explícito.
 - **Commits:** código y documentación por separado.
-- **GitHub = fuente de verdad (canónica).** Este repo en GitHub es la fuente; las copias en local o en contenedores (CT 112 `/docker/freqtrade/user_data`) son **artefactos de despliegue**, no fuente. Si discrepan, manda GitHub. Verificar contra la API tras cada push.
+- **GitHub = fuente de verdad (canónica).** Este repo en GitHub es la fuente; las copias en local o en contenedores (CT 113 `/opt/freqtrade/user_data`) son **artefactos de despliegue**, no fuente. Si discrepan, manda GitHub. Verificar contra la API tras cada push.
 - **Estructura de repo disciplinada:** `scripts/` (análisis/utilidades), `strategies/` (freqtrade), `tests/` (unitarios). Al mover/añadir código, actualizar `PROJECT.md` + `README.md`.
 - **Ritual de push:** embeber el token real en la URL, **nunca** el placeholder; tras el push, limpiar el token del remote local. Scan anti-secret (`grep -rniE 'ghp_|github_pat_|password'`) antes de cada commit.
 
@@ -146,13 +146,11 @@ trading-research/
 ```
 
 **Cómo correr `scripts/screening.py`:** el script asume los datos de freqtrade en
-`/freqtrade/user_data/data/coinbase/<PAR>-2h.feather` (ruta del contenedor). Desde el host:
+`/opt/freqtrade/user_data/data/coinbase/<PAR>-2h.feather` (ruta de CT 113 nativo). Desde el host:
 ```bash
 scp scripts/screening.py openclaw@192.168.1.222:/tmp/screening.py
-ssh openclaw@192.168.1.222 "sudo pct push 112 /tmp/screening.py /docker/freqtrade/user_data/screening.py"
-ssh openclaw@192.168.1.222 "sudo pct exec 112 -- docker run --rm --entrypoint python3 \
-  -v /docker/freqtrade/user_data:/freqtrade/user_data -w /freqtrade/user_data \
-  freqtradeorg/freqtrade:stable /freqtrade/user_data/screening.py"
+ssh openclaw@192.168.1.222 "sudo pct push 113 /tmp/screening.py /opt/freqtrade/user_data/screening.py"
+ssh openclaw@192.168.1.222 "sudo pct exec 113 -- bash -c 'cd /opt/freqtrade && /opt/ft/bin/python /opt/freqtrade/user_data/screening.py'"
 ```
 
 

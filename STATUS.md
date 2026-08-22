@@ -4,7 +4,7 @@
 > Estados: ✅ done · 🔄 in-progress · ⬜ pending
 
 ## Infra (base)
-- ✅ Contenedor Docker `freqtrade` en CT 112 (`docker-apps`, Proxmox 192.168.1.222), `--cpus 2 --memory 2g`, volumen `/docker/freqtrade/user_data`.
+- ✅ **freqtrade NATIVO** en CT 113 (`freqtrade-native`, Debian 13, 192.168.1.58, 4c/4GB/8GB `local-lvm`), venv `/opt/ft` (freqtrade 2026.7). Datos en `/opt/freqtrade/user_data/`. Ver `SETUP.md`.
 - ✅ 9 pares candidatos Coinbase 2h (2020→2026) descargados: BTC/ETH/SOL/XRP/ADA/DOGE/DOT/AVAX/LINK.
 - ✅ Repo GitHub público `hrodres/trading-research` con PROJECT.md, README.md, decision_log.md, LICENSE, .gitignore.
 - ✅ Estructura de repo (`scripts/`, `strategies/`, `tests/`).

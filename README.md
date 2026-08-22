@@ -11,7 +11,7 @@ Búsqueda de **edge experto/pro** en crypto (Profit Factor ≥ 1.5 sostenido out
 Proyecto de I&D de trading cuantitativo en crypto: usa **freqtrade** como andamiaje (backtest OOS, hyperopt) y construye la capa de valor propia — señales (edge), orquestador adaptativo y aprendizaje por acción/omisión.
 
 ## Estado
-- Infra: contenedor Docker `freqtrade` en homelab.
+- Infra: **freqtrade NATIVO** en CT 113 (`freqtrade-native`, Debian 13, Proxmox 192.168.1.222) — ver `SETUP.md`.
 - Datos: 9 pares candidatos Coinbase 2h (2020→2026), **sin credenciales**.
 - Edge actual: frontera (~PF 1.2). Objetivo: ≥ 1.5.
 
