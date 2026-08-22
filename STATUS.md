@@ -37,6 +37,12 @@
 - ⚠️ Lectura: el componente régimen del selector añade valor real (recorta pérdidas de bear en todas y en ambos proxies) pero es insuficiente en solitario: edge de régimen confirmado, captura parte no todo.
 - ✅ Evidencia: `results/regime_filter_summary.csv` (columnas all/global/per-par).
 
+## Fase B.4 — Pool del selector (short-candidates, brazo bear)
+- ✅ 4 candidatas SHORT espejo (futures Binance perp, `can_short`, fee 0.001, 9 pares `:USDT`, 5 ventanas 2021–2025/26 = 20 backtests): `AtrSlShort`, `PartialtpShort`, `RotationShort`, `VolBreakoutShort`. Smoke VolBreakoutShort 2021 OK (87 trades, is_short=True). Commit `8c139f6`.
+- ✅ **Sin filtro: patrón espejo exacto del long** — TODAS ganan en 2022 (bear): AtrSl 1.54, Partialtp 1.67, Rotation 1.70, VolBreakout 1.47; pierden en bull (2021/2023). Mediana PF ~1.0. `results/shortcandidates_summary.csv` + `scripts/analyze_longcandidates.py --extracted <short_dir> --out …` (generalizado).
+- ✅ **Con filtro de régimen bear** (`regime_filter.py --direction short`, régimen bear ⇔ close<SMA200, klines perp `results/perp_klines/`, global=BTCUSDT + per-par; None=no operar): PF agregado per-par AtrSl 1.022 / Partialtp 1.166 / Rotation 1.106 / VolBreakout 0.921; global ~0.85–1.02. 2022 per-par se mantiene fuerte (1.42–1.75) pero 2025-26 no cruza (0.78–1.05). **Ninguna cruza gate PF≥1.5 OOS** (0–1/5 ventanas ≥1.5). `results/regime_filter_short_summary.csv`.
+- ⚠️ Lectura: el componente régimen añade valor (bear 2022 neto positivo) pero el direccional short, como el long, tiene techo ~1.2 agregado. **El carry (7.55) sigue siendo la única vía que pasa el gate.**
+
 ## Fase D — Diversificación
 - ✅ **D combinatoria**: PF agregado top-10 = **1.063** (todas las monedas) / **0.963** (gate-compliant sin XRP) — INFERIOR a la mejor celda (1.283). Correlación intra-par 0.95–0.99 → no diversifica. `results/portfolio_D.json`.
 - ✅ **D carry (en SECO, sin credenciales)**: funding carry long spot + short perp 1:1, Binance perp 2021–2025 → PF agregado **3.447** (rompe gate). Pero correlación vs trend +0.43/+0.55 (NO diversifica; concentra riesgo de régimen). 2022 cae a PF 0.51. `results/carry_D.json`.
@@ -52,4 +58,4 @@
 - ⬜ Si OOS ≥ 1.5 → staging. Si ~1.3 → aceptar o archivar.
 
 ---
-*Última actualización: 2026-08-22 — Fases A/B/C/B.2/B.3/D + Selector v1 ejecutadas. Direccional: techo ~1.3 (no alcanza). **Carry + filtro de régimen: única señal que pasa PF≥1.5 OOS en TODAS las ventanas (7.55 global, mínimo 3.08)**. Selector v1: selección walk-forward añade valor (long 0.67→1.17) pero el proceso completo no llega a 1.5 (1.245, 2/5 ventanas) — el long direccional lastra; el carry es la vía validada. Pendiente: staging del carry en vivo o reforzar/gestionar el long.*
+*Última actualización: 2026-08-22 — Fases A/B/C/B.2/B.3/B.4/D + Selector v1 ejecutadas. Direccional LONG y SHORT: techo ~1.2–1.3 (no alcanzan; el short es espejo del long — gana en bear 2022, pierde en bull). **Carry + filtro de régimen: única señal que pasa PF≥1.5 OOS en TODAS las ventanas (7.55 global, mínimo 3.08)**. Selector v1: selección walk-forward añade valor (long 0.67→1.17) pero el proceso completo no llega a 1.5 (1.245, 2/5 ventanas) — el direccional (long y short) lastra; el carry es la vía validada. Pendiente: staging del carry en vivo o reforzar/gestionar el direccional.*

@@ -47,3 +47,5 @@ results/pairs_2h.csv
 
 # ─── Brazo short: klines perp Binance (regenerable · solo CCXT local; la fuente autoritativa son los feathers futures de CT 113) ──
 results/perp_klines/
+# ─── Brazo short: zips/JSON extraídos de los 20 backtests futures (regenerable desde CT 113: results/shortcandidates/) ──
+results/shortcandidates/
