@@ -9,7 +9,7 @@ Registro cronológico de decisiones y resultados. **Los números vivos están en
 - Repo GitHub público.
 
 ## Cambio de alcance (2026-08-22) — El proyecto ES un sistema de señales
-- CRÍTICA del usuario: el objetivo NO es "encontrar 1 estrategia long con PF≥1.5 OOS". Es un **meta-controlador** que decide la mejor estrategia en cada momento (regime/online selection).
+- Crítica del usuario: el objetivo NO es "encontrar 1 estrategia long con PF≥1.5 OOS". Es un **meta-controlador** que decide la mejor estrategia en cada momento (regime/online selection).
 - Sesgo señalado: backtestear N candidatas y quedarse con la de mayor PF = **selection bias / look-ahead**. Fix: selector con **walk-forward estricto** — la decisión en `t` usa solo datos `≤ t`; el PF se mide en datos `> t`.
 - Las 4 candidatas long (rotation/volbreakout/atr_sl/partialtp) = **pool del selector**, no el producto final.
 - Aclaración del usuario (06:00): freqtrade sigue siendo el harness (decisión de inicio, vigente); la crítica NO va contra freqtrade/backtesting, sino contra CÓMO se valida la selección.
@@ -44,9 +44,10 @@ Registro cronológico de decisiones y resultados. **Los números vivos están en
 ### D.2 Carry en SECO
 - Funding público Binance USDT-M perp 2021–2025 (49.377 eventos). Long spot + short perp 1:1 → PF agregado **3.447** (rompe gate). PERO correlación vs trend +0.43/+0.55 (concentra riesgo de régimen); 2022 cae a PF 0.51. Staging pendiente (credenciales + OK). `results/carry_D.json`.
 
-## Estado final
-- A✅ B✅ B.2✅ B.3✅ C✅ D(combinatoria+carry seco)✅. Carry staging ⬜ · E ⬜ · F ⬜.
-- Ninguna señal direccional alcanza PF≥1.5 (techo ~1.3, incluso con filtro de régimen global: VolBreakoutLong PF agregado 1.304). El carry lo rompe en backtest (PF 3.447) pero es mecanismo de funding, no señal direccional, y no está validado en vivo. Repo en "punto honesto", documentación consolidada.
+## Snapshot de estado (~10:00, antes del brazo short y la decisión final)
+> Nota: este bloque es un snapshot de mitad de proyecto. El veredicto definitivo y el archivo están en `## 16:30 — DECISIÓN FINAL` y en `STATUS.md` (Fase F). No refleja el estado terminal.
+- A✅ B✅ B.2✅ B.3✅ C✅ D(combinatoria+carry seco)✅. Carry staging ⬜ · E ⬜ · F ⬜ (en aquel momento).
+- Ninguna señal direccional alcanza PF≥1.5 (techo ~1.3, incluso con filtro de régimen global: VolBreakoutLong PF agregado 1.304). El carry lo rompe en backtest (PF 3.447) pero es mecanismo de funding, no señal direccional, y no está validado en vivo. Repo en "punto honesto" (snapshot).
 
 ## 10:17 — D.2: carry + filtro de régimen (componente selector aplicado al carry)
 - Hipótesis: el carry cae a PF 0.51 en 2022 porque en bear el funding se vuelve negativo. Aplicar el interruptor de régimen (close BTC 2h > SMA200 / close propio par > SMA200, sin lookahead) debería recortar esas pérdidas.

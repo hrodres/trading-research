@@ -5,7 +5,7 @@
 
 ## Infra (base)
 - ✅ **freqtrade nativo** (venv, freqtrade 2026.7). Datos en `user_data/data/coinbase/`. Ver `SETUP.md`.
-- ✅ 9 pares candidatos Coinbase 2h (2020→2026): BTC/ETH/SOL/XRP/ADA/DOGE/DOT/AVAX/LINK.
+- ✅ 9 pares candidatos Coinbase 2h (2020–2026): BTC/ETH/SOL/XRP/ADA/DOGE/DOT/AVAX/LINK.
 - ✅ Repo GitHub público con PROJECT.md, README.md, STATUS.md, decision_log.md, SETUP.md, LICENSE, .gitignore.
 - ✅ Estructura `scripts/`, `strategies/`, `tests/`, `configs/`, `results/`.
 - ✅ `requirements.txt` (entorno reproducible).
@@ -25,23 +25,23 @@
 ## Fase B.2 — Pool del selector (long-candidates)
 - ✅ 4 candidatas long sobre 9 pares Coinbase 2h, 5 ventanas 2021–2025/26 (20 backtests, fees 1.2% worst-case): `AtrSlLong`, `PartialtpLong`, `RotationLong`, `VolBreakoutLong`.
 - ✅ **Ninguna pasa gate PF≥1.5 OOS**. Mejor `VolBreakoutLong`: mediana PF 1.45 (2021: 2.36, 2023: 1.53, 2024: 1.45; 2022: 0.46, 2025-26: 0.60 → 3/5 ventanas PF>1). `RotationLong` mediana 1.01; `AtrSlLong` y `PartialtpLong` 0/5 ventanas.
-- ⚠️ **Patrón de régimen**: TODAS pierden en 2022 y 2025-26 (bear/range) y ganan en 2021/2023/2024 (bull). Edge = régimen alcista, no alpha independiente. Confirmado: 0 candidatas avanzan.
+- **Patrón de régimen**: TODAS pierden en 2022 y 2025-26 (bear/range) y ganan en 2021/2023/2024 (bull). Edge = régimen alcista, no alpha independiente. Confirmado: 0 candidatas avanzan.
 - ✅ `results/longcandidates_summary.csv` + `scripts/analyze_longcandidates.py`.
 
 ## Fase B.3 — Filtro de régimen (selector, componente 1; global + per-par)
 - ✅ Regla **declarada a priori** (sin selection bias): bull regime ⇔ `close _2h > SMA200` (≈ 16.7 días). Decisión en `t` usa SOLO la última vela cerrada antes del open del trade (bisect, sin lookahead); régimen indefinido (inicio de serie) = no operar.
 - ✅ Dos proxies comparados: **GLOBAL** (BTC/USDT) y **PER-PAR** (el propio par). Klines regenerables desde CT 113 (`results/btc_2h.csv`, `results/pairs_2h.csv` git-ignored).
-- 📈 **GLOBAL sube el PF AGREGADO de las 4** (AtrSl 0.555→0.667, Partialtp 0.622→0.720, Rotation 0.711→0.842, VolBreakout 1.112→**1.304**; VolBreakout mediana PF 1.45→1.60, 3/5 ventanas PF≥1.5).
-- 📈 **PER-PAR mejora a 3 de 4 vs GLOBAL** (AtrSl 0.695, Partialtp 0.754, Rotation 0.876) pero empeora a la mejor: VolBreakout 1.229 vs 1.304. Mediana PF_perpar VolBreakout = 1.61 (3/5 ventanas ≥1.5).
+- **GLOBAL:** sube el PF AGREGADO de las 4 (AtrSl 0.555→0.667, Partialtp 0.622→0.720, Rotation 0.711→0.842, VolBreakout 1.112→**1.304**; VolBreakout mediana PF 1.45→1.60, 3/5 ventanas PF≥1.5).
+- **PER-PAR:** mejora a 3 de 4 vs GLOBAL (AtrSl 0.695, Partialtp 0.754, Rotation 0.876) pero empeora a la mejor: VolBreakout 1.229 vs 1.304. Mediana PF_perpar VolBreakout = 1.61 (3/5 ventanas ≥1.5).
 - ❌ **Ninguna variante cruza gate PF≥1.5 OOS** (mejor agregado: VolBreakout 1.304 global / 1.229 per-par). Techo del long con filtro de régimen sigue ~1.3.
-- ⚠️ Lectura: el componente régimen del selector añade valor real (recorta pérdidas de bear en todas y en ambos proxies) pero es insuficiente en solitario: edge de régimen confirmado, captura parte no todo.
+- **Interpretación:** el componente régimen del selector añade valor real (recorta pérdidas de bear en todas y en ambos proxies) pero es insuficiente en solitario: edge de régimen confirmado, captura parte no todo.
 - ✅ Evidencia: `results/regime_filter_summary.csv` (columnas all/global/per-par).
 
 ## Fase B.4 — Pool del selector (short-candidates, brazo bear)
 - ✅ 4 candidatas SHORT espejo (futures Binance perp, `can_short`, fee 0.001, 9 pares `:USDT`, 5 ventanas 2021–2025/26 = 20 backtests): `AtrSlShort`, `PartialtpShort`, `RotationShort`, `VolBreakoutShort`. Smoke VolBreakoutShort 2021 OK (87 trades, is_short=True). Commit `8c139f6`.
 - ✅ **Sin filtro: patrón espejo exacto del long** — TODAS ganan en 2022 (bear): AtrSl 1.54, Partialtp 1.67, Rotation 1.70, VolBreakout 1.47; pierden en bull (2021/2023). Mediana PF ~1.0. `results/shortcandidates_summary.csv` + `scripts/analyze_longcandidates.py --extracted <short_dir> --out …` (generalizado).
 - ✅ **Con filtro de régimen bear** (`regime_filter.py --direction short`, régimen bear ⇔ close<SMA200, klines perp `results/perp_klines/`, global=BTCUSDT + per-par; None=no operar): PF agregado per-par AtrSl 1.022 / Partialtp 1.166 / Rotation 1.106 / VolBreakout 0.921; global ~0.85–1.02. 2022 per-par se mantiene fuerte (1.42–1.75) pero 2025-26 no cruza (0.78–1.05). **Ninguna cruza gate PF≥1.5 OOS** (0–1/5 ventanas ≥1.5). `results/regime_filter_short_summary.csv`.
-- ⚠️ Lectura: el componente régimen añade valor (bear 2022 neto positivo) pero el direccional short, como el long, tiene techo ~1.2 agregado. **El carry (7.55) sigue siendo la única vía que pasa el gate.**
+- **Interpretación:** el componente régimen añade valor (bear 2022 neto positivo) pero el direccional short, como el long, tiene techo ~1.2 agregado. **El carry (7.55) sigue siendo la única vía que pasa el gate.**
 
 ## Fase D — Diversificación
 - ✅ **D combinatoria**: PF agregado top-10 = **1.063** (todas las monedas) / **0.963** (gate-compliant sin XRP) — INFERIOR a la mejor celda (1.283). Correlación intra-par 0.95–0.99 → no diversifica. `results/portfolio_D.json`.

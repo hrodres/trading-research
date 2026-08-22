@@ -14,7 +14,7 @@ validación, no el producto.
 ## Criterios de éxito
 | Métrica | ÉXITO | EXCELENCIA |
 |---|---|---|
-| PF del PROCESO de selección OOS (walk-forward 2-3a, neto fees+slip+compuesto) | ≥ 1.5 | ≥ 2.0 |
+| PF del PROCESO de selección OOS (walk-forward 2-3 años, neto fees+slip+compuesto) | ≥ 1.5 | ≥ 2.0 |
 | Max drawdown (backtest) | ≤ 20% | ≤ 12% |
 | Sharpe anualizado | ≥ 1.0 | ≥ 1.5 |
 
@@ -43,7 +43,7 @@ pero honesto.
 
 ## Fases (gates en STATUS.md)
 - **A** Cimientos de medida (harness OOS reproducible).
-- **B** Señal de entrada · **B.2** Pool del selector (4 candidatas long × 5 ventanas) · **C** Salida.
+- **B** Señal de entrada · **B.2** Pool del selector (long-candidates) · **B.3** Filtro de régimen (selector, componente 1) · **B.4** Pool del selector (short-candidates, brazo bear) · **C** Salida.
 - **D** Diversificación (combinatoria + carry) · **E** Sizing/ejecución · **F** Reevaluar con evidencia.
 
 ## Gobernanza

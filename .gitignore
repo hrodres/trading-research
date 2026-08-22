@@ -7,7 +7,6 @@ creds.json
 config.secrets.json
 *.token
 secrets.*
-**/user_data/config.json
 **/config.json
 
 # ─── Datos de mercado (se descargan, no se versionan) ─────
