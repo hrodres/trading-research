@@ -42,5 +42,7 @@ trading-research/
 - Sin apalancamiento para inflar el PF.
 - Sin overfit (OOS obligatorio).
 - Sin dinero real hasta el gate de staging.
+- **GitHub es la fuente de verdad** (canónica). Las copias en local/contenedores son artefactos de despliegue; si discrepan, manda GitHub. Verificar contra la API tras cada push.
+- **Estructura disciplinada:** `scripts/` (análisis), `strategies/` (freqtrade), `tests/` (unitarios). Al mover/cambiar código, actualizar `PROJECT.md` + `README.md`.
 
 > Repo público. Datos de mercado públicos, sin credenciales.

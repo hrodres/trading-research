@@ -85,6 +85,9 @@ con drawdown acotado. El edge debe ser **real y robusto**, no un artefacto de ov
 - **Modelo:** `hy3-free` para análisis/interactivo (este chat). El cron de v9 (`auto-trade-v9`, deepseek-v4-flash) **no se toca**.
 - **Sin acciones en vivo:** no órdenes reales, no crear repos externos, sin OK explícito.
 - **Commits:** código y documentación por separado.
+- **GitHub = fuente de verdad (canónica).** Este repo en GitHub es la fuente; las copias en local o en contenedores (CT 112 `/docker/freqtrade/user_data`) son **artefactos de despliegue**, no fuente. Si discrepan, manda GitHub. Verificar contra la API tras cada push.
+- **Estructura de repo disciplinada:** `scripts/` (análisis/utilidades), `strategies/` (freqtrade), `tests/` (unitarios). Al mover/añadir código, actualizar `PROJECT.md` + `README.md`.
+- **Ritual de push:** embeber el token real en la URL, **nunca** el placeholder; tras el push, limpiar el token del remote local. Scan anti-secret (`grep -rniE 'ghp_|github_pat_|password'`) antes de cada commit.
 
 ---
 
