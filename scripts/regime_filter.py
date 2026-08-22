@@ -73,10 +73,17 @@ def make_lookup(rows):
 
 
 def regime_at(open_date, dates, regime):
-    """Régimen vigente al abrir: última vela cerrada ANTES del open_date."""
+    """Régimen vigente al abrir: última vela cerrada ANTES del open_date.
+
+    Devuelve el valor CRUDO: True (bull) / False (bear) / None (no definido,
+    menos de SMA_N velas de historia). El caller decide qué es "operar":
+      - long : operar si is True
+      - short: operar si is False
+    None SIEMPRE es no-operar (conservador).
+    """
     idx = bisect_left(dates, open_date) - 1
-    if idx < 0 or regime[idx] is None:
-        return False  # régimen no definido -> no operar (conservador)
+    if idx < 0:
+        return None
     return regime[idx]
 
 
@@ -122,21 +129,69 @@ def fmt_pf(x):
     return "inf" if x == float("inf") else (round(x, 3) if x == x else "NaN")
 
 
+def norm_pair(pair, direction):
+    """Normaliza el par del trade a la clave del lookup de klines.
+
+    Long (spot Coinbase): pair ya es la clave del CSV (ej 'BTC/USDT').
+    Short (futures Binance): pair es 'DOT/USDT:USDT' -> clave 'DOTUSDT'
+    (nombre de los CSVs en results/perp_klines/).
+    """
+    if direction == "short":
+        return pair.replace("/", "").replace(":USDT", "")
+    return pair
+
+
+def is_kept(direction, regime_val):
+    """¿Operar en este régimen según dirección? None (indefinido) = no operar."""
+    if regime_val is None:
+        return False
+    return regime_val is True if direction == "long" else regime_val is False
+
+
+def load_perp_dir(perp_dir):
+    """Carga results/perp_klines/*.csv -> {nombre_sin_ext: (dates, closes, regime)}."""
+    lu = {}
+    for fn in sorted(os.listdir(perp_dir)):
+        if not fn.endswith(".csv"):
+            continue
+        key = fn[: -len(".csv")]
+        lu[key] = make_lookup(load_regular_csv(os.path.join(perp_dir, fn)))["GLOBAL"]
+    return lu
+
+
 def main():
+    global EXTRACTED
     ap = argparse.ArgumentParser()
     ap.add_argument("--btc", default=os.path.join(REPO, "results", "btc_2h.csv"))
     ap.add_argument("--pairs", default=os.path.join(REPO, "results", "pairs_2h.csv"))
+    ap.add_argument("--direction", choices=["long", "short"], default="long")
+    ap.add_argument("--extracted", default=EXTRACTED)
+    ap.add_argument("--perp-dir", default=os.path.join(REPO, "results", "perp_klines"))
     ap.add_argument("--out", default=os.path.join(REPO, "results", "regime_filter_summary.csv"))
     args = ap.parse_args()
+    direction = args.direction
+    EXTRACTED = args.extracted
 
-    global_lu = make_lookup(load_regular_csv(args.btc)) if os.path.exists(args.btc) else None
-    perpar_lu = make_lookup(load_regular_csv(args.pairs, pair_col="pair")) if os.path.exists(args.pairs) else None
-    if global_lu:
-        print(f"GLOBAL: BTC {len(global_lu['GLOBAL'][1])} velas, bull en "
-              f"{sum(1 for r in global_lu['GLOBAL'][2] if r is True)}")
-    if perpar_lu:
-        print(f"PERPAR: {len(perpar_lu)} pares cargados "
-              f"({min(len(v[1]) for v in perpar_lu.values())}-{max(len(v[1]) for v in perpar_lu.values())} velas)")
+    if direction == "short":
+        # Klines perp de Binance: global = BTCUSDT, per-par = cada CSV del dir.
+        perp_lu = load_perp_dir(args.perp_dir)
+        global_lu = {"GLOBAL": perp_lu.pop("BTCUSDT")} if "BTCUSDT" in perp_lu else None
+        perpar_lu = perp_lu
+        if global_lu:
+            print(f"GLOBAL(short): BTC/USDT perp {len(global_lu['GLOBAL'][1])} velas, bear en "
+                  f"{sum(1 for r in global_lu['GLOBAL'][2] if r is False)}")
+        if perpar_lu:
+            print(f"PERPAR(short): {len(perpar_lu)} pares perp cargados "
+                  f"({min(len(v[1]) for v in perpar_lu.values())}-{max(len(v[1]) for v in perpar_lu.values())} velas)")
+    else:
+        global_lu = make_lookup(load_regular_csv(args.btc)) if os.path.exists(args.btc) else None
+        perpar_lu = make_lookup(load_regular_csv(args.pairs, pair_col="pair")) if os.path.exists(args.pairs) else None
+        if global_lu:
+            print(f"GLOBAL: BTC {len(global_lu['GLOBAL'][1])} velas, bull en "
+                  f"{sum(1 for r in global_lu['GLOBAL'][2] if r is True)}")
+        if perpar_lu:
+            print(f"PERPAR: {len(perpar_lu)} pares cargados "
+                  f"({min(len(v[1]) for v in perpar_lu.values())}-{max(len(v[1]) for v in perpar_lu.values())} velas)")
 
     groups = defaultdict(list)
     for sname, ventana, t in iter_backtests():
@@ -148,18 +203,18 @@ def main():
         if global_lu:
             dts, cls, reg = global_lu["GLOBAL"]
             kept_g = [t for t in trades
-                      if regime_at(datetime.fromisoformat(t["open_date"]), dts, reg)]
+                      if is_kept(direction, regime_at(datetime.fromisoformat(t["open_date"]), dts, reg))]
             m_g = metrics(kept_g)
         else:
             m_g = m_all
         if perpar_lu:
             kept_p = []
             for t in trades:
-                key = t["pair"]
+                key = norm_pair(t["pair"], direction)
                 if key not in perpar_lu:
                     continue  # par sin klines -> no operar
                 dts, cls, reg = perpar_lu[key]
-                if regime_at(datetime.fromisoformat(t["open_date"]), dts, reg):
+                if is_kept(direction, regime_at(datetime.fromisoformat(t["open_date"]), dts, reg)):
                     kept_p.append(t)
             m_p = metrics(kept_p)
         else:

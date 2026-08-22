@@ -17,6 +17,9 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 EXTRACTED = os.path.join(ROOT, "results", "longcandidates", "extracted")
 OUT_CSV = os.path.join(ROOT, "results", "longcandidates_summary.csv")
 
+# Soportar también el pool SHORT (futures): mismo formato de export freqtrade.
+# Uso: --extracted results/shortcandidates/extracted --out results/shortcandidates_summary.csv
+
 WINDOWS = {
     "20210101-20211231": "2021",
     "20220101-20221231": "2022",
@@ -80,6 +83,13 @@ def fmt(v, nd=2):
 
 
 def main():
+    import argparse
+    global EXTRACTED, OUT_CSV
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--extracted", default=EXTRACTED)
+    ap.add_argument("--out", default=OUT_CSV)
+    args = ap.parse_args()
+    EXTRACTED, OUT_CSV = args.extracted, args.out
     rows = load_results()
     # CSV
     with open(OUT_CSV, "w", newline="") as fh:
