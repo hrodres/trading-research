@@ -20,6 +20,11 @@ Registro cronológico de decisiones y resultados. **Los números vivos están en
 ## Fase B — Entradas
 - 6 variants. **0 variants/par pasan gate**. Mejor celda: EntryVolConfirm SOL/USDT PF **1.283** (techo trend 2h ~1.3). MeanRev (contrarian) PF 0.066 → régimen trend-following. `results/entrystudy_B.json`.
 
+## Fase B.2 — Pool del selector (long-candidates)
+- 4 candidatas long (`AtrSlLong`, `PartialtpLong`, `RotationLong`, `VolBreakoutLong`) sobre 9 pares Coinbase 2h, 5 ventanas 2021–2026, fees 1.2% worst-case. **Ninguna pasa gate PF≥1.5**.
+- Mejor: `VolBreakoutLong` (PF mediana 1.45; 2021: 2.36, 2023: 1.53, 2024: 1.45; 2022: 0.46, 2025-26: 0.60). `RotationLong` mediana 1.01; `AtrSlLong` y `PartialtpLong` 0/5 ventanas rentables.
+- **Patrón de régimen**: todas ganan en bull (2021/2023/2024) y pierden en bear/range (2022/2025-26) → edge de régimen, no alpha independiente. Confirmado: 0 candidatas avanzan. `results/longcandidates_summary.csv`.
+
 ## Fase D — Diversificación
 ### D.1 Combinatoria
 - Agrega 6622 trades OOS de B. PF agregado top-10 = **1.063** / **0.963** (gate sin XRP) — INFERIOR a la mejor celda (1.283). Correlación intra-par 0.95–0.99 → no diversifica. **Gate NO alcanzado con spot trend 2h solo.** `results/portfolio_D.json`.

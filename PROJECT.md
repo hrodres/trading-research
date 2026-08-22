@@ -36,8 +36,8 @@ ser overfit o cola de riesgo escondida; el target 1.5 es ambicioso pero honesto.
 
 ## Fases (gates en STATUS.md)
 - **A** Cimientos de medida (harness OOS reproducible).
-- **B** Señal de entrada · **C** Salida · **D** Diversificación (combinatoria + carry).
-- **E** Sizing/ejecución · **F** Reevaluar con evidencia.
+- **B** Señal de entrada · **B.2** Pool del selector (4 candidatas long × 5 ventanas) · **C** Salida.
+- **D** Diversificación (combinatoria + carry) · **E** Sizing/ejecución · **F** Reevaluar con evidencia.
 
 ## Gobernanza
 - Calidad: `py_compile` + tests antes de cada cambio; nunca commitear sin validar.
