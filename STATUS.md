@@ -28,13 +28,14 @@
 - ⚠️ **Patrón de régimen**: TODAS pierden en 2022 y 2025-26 (bear/range) y ganan en 2021/2023/2024 (bull). Edge = régimen alcista, no alpha independiente. Confirmado: 0 candidatas avanzan.
 - ✅ `results/longcandidates_summary.csv` + `scripts/analyze_longcandidates.py`.
 
-## Fase B.3 — Filtro de régimen global (selector, componente 1)
-- ✅ Regla **declarada a priori** (sin selection bias): bull regime ⇔ `close BTC/USDT 2h > SMA200` (200 velas ≈ 16.7 días). Decisión en `t` usa SOLO la última vela cerrada antes del open del trade (bisect, sin lookahead); régimen indefinido (inicio de serie) = no operar.
-- ✅ Aplicado a los 20 trades de B.2 (`scripts/regime_filter.py`, klines BTC regenerable desde CT 113 → `results/btc_2h.csv` git-ignored).
-- 📈 **Mejora el PF AGREGADO de las 4** (AtrSl 0.555→0.667, Partialtp 0.622→0.720, Rotation 0.711→0.842, VolBreakout 1.112→**1.304**; VolBreakout mediana PF 1.45→1.60, 3/5 ventanas PF≥1.5).
-- ❌ **Ninguna cruza gate PF≥1.5 OOS** con el filtro. Techo del long con filtro global sigue ~1.3 (VolBreakout 2022: 0.54, 2025-26: 0.77).
-- ⚠️ Lectura: el meta-filtro de régimen es un componente VÁLIDO del selector (recorta pérdidas en bear en todas), pero insuficiente en solitario: confirma edge de régimen, captura parte, no todo.
-- ✅ Evidencia: `results/regime_filter_summary.csv`.
+## Fase B.3 — Filtro de régimen (selector, componente 1; global + per-par)
+- ✅ Regla **declarada a priori** (sin selection bias): bull regime ⇔ `close _2h > SMA200` (≈ 16.7 días). Decisión en `t` usa SOLO la última vela cerrada antes del open del trade (bisect, sin lookahead); régimen indefinido (inicio de serie) = no operar.
+- ✅ Dos proxies comparados: **GLOBAL** (BTC/USDT) y **PER-PAR** (el propio par). Klines regenerables desde CT 113 (`results/btc_2h.csv`, `results/pairs_2h.csv` git-ignored).
+- 📈 **GLOBAL sube el PF AGREGADO de las 4** (AtrSl 0.555→0.667, Partialtp 0.622→0.720, Rotation 0.711→0.842, VolBreakout 1.112→**1.304**; VolBreakout mediana PF 1.45→1.60, 3/5 ventanas PF≥1.5).
+- 📈 **PER-PAR mejora a 3 de 4 vs GLOBAL** (AtrSl 0.695, Partialtp 0.754, Rotation 0.876) pero empeora a la mejor: VolBreakout 1.229 vs 1.304. Mediana PF_perpar VolBreakout = 1.61 (3/5 ventanas ≥1.5).
+- ❌ **Ninguna variante cruza gate PF≥1.5 OOS** (mejor agregado: VolBreakout 1.304 global / 1.229 per-par). Techo del long con filtro de régimen sigue ~1.3.
+- ⚠️ Lectura: el componente régimen del selector añade valor real (recorta pérdidas de bear en todas y en ambos proxies) pero es insuficiente en solitario: edge de régimen confirmado, captura parte no todo.
+- ✅ Evidencia: `results/regime_filter_summary.csv` (columnas all/global/per-par).
 
 ## Fase D — Diversificación
 - ✅ **D combinatoria**: PF agregado top-10 = **1.063** (todas las monedas) / **0.963** (gate-compliant sin XRP) — INFERIOR a la mejor celda (1.283). Correlación intra-par 0.95–0.99 → no diversifica. `results/portfolio_D.json`.
@@ -49,4 +50,4 @@
 - ⬜ Si OOS ≥ 1.5 → staging. Si ~1.3 → aceptar o archivar.
 
 ---
-*Última actualización: 2026-08-22 — Fases A/B/C/B.2/B.3/D ejecutadas. Sin señal direccional que alcance PF≥1.5 (techo ~1.3, incluso con filtro de régimen global: mejor PF agregado 1.304 VolBreakoutLong); el carry lo rompe en seco (3.447) pero no está validado en vivo.*
+*Última actualización: 2026-08-22 — Fases A/B/C/B.2/B.3/D ejecutadas. Sin señal direccional que alcance PF≥1.5 (techo ~1.3, incluso con filtro de régimen global o per-par: mejor PF agregado 1.304 VolBreakoutLong); el carry lo rompe en seco (3.447) pero no está validado en vivo.*

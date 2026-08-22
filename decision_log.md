@@ -32,11 +32,11 @@ Registro cronológico de decisiones y resultados. **Los números vivos están en
 - Mejor: `VolBreakoutLong` (PF mediana 1.45; 2021: 2.36, 2023: 1.53, 2024: 1.45; 2022: 0.46, 2025-26: 0.60). `RotationLong` mediana 1.01; `AtrSlLong` y `PartialtpLong` 0/5 ventanas rentables.
 - **Patrón de régimen**: todas ganan en bull (2021/2023/2024) y pierden en bear/range (2022/2025-26) → edge de régimen, no alpha independiente. Confirmado: 0 candidatas avanzan. `results/longcandidates_summary.csv`.
 
-## Fase B.3 — Filtro de régimen global (selector, componente 1)
-- Regla A PRIORI (antes de ver resultados): bull regime ⇔ close BTC/USDT 2h > SMA200; decisión en `t` solo con velas cerradas ≤ `t` (sin lookahead); régimen no definido (inicio serie) = no operar.
-- Aplicado a los trades de B.2: **mejora el PF agregado de las 4** (AtrSl 0.555→0.667, Partialtp 0.622→0.720, Rotation 0.711→0.842, VolBreakout 1.112→1.304); VolBreakout mediana PF 1.45→1.60 con 3/5 ventanas ≥1.5.
-- **Ninguna alcanza gate PF≥1.5 OOS con el filtro.** El meta-filtro de régimen añade valor (recorta las pérdidas de bear) pero no basta: el techo del long con filtro global sigue ~1.3. `results/regime_filter_summary.csv`.
-- **Siguiente decisión pendiente**: régimen más fino (por par, no solo BTC global) u orientar el selector a combinar régimen + carry (único mecanismo PF 3.4 en seco).
+## Fase B.3 — Filtro de régimen (selector, componente 1; global + per-par)
+- Regla A PRIORI (antes de ver resultados): bull regime ⇔ close 2h > SMA200; decisión en `t` solo con velas cerradas ≤ `t` (sin lookahead); régimen no definido (inicio serie) = no operar.
+- Proxies comparados: **GLOBAL** (BTC/USDT) y **PER-PAR** (el propio par). Ambos mejoran el PF agregado de las 4 vs sin filtro (VolBreakout: 1.112 → 1.304 global / 1.229 per-par; Rotation: 0.711 → 0.842 / 0.876; Partialtp: 0.622 → 0.720 / 0.754; AtrSl: 0.555 → 0.667 / 0.695).
+- **Ninguna variante alcanza gate PF≥1.5 OOS** (mejor agregado VolBreakout 1.304 global; mediana PF_perpar 1.61, 3/5 ventanas ≥1.5 pero 2022 y 2025-26 siguen perdiendo). El componente régimen añade valor pero no basta: techo del long con filtro ~1.3. `results/regime_filter_summary.csv`.
+- **Siguiente paso lógico pendiente**: combinar régimen (componente 1) + carry (único mecanismo PF 3.4 en seco), u orientar el selector a selección walk-forward de estrategia por ventana.
 
 ## Fase D — Diversificación
 ### D.1 Combinatoria

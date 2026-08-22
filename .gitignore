@@ -43,3 +43,4 @@ results/longcandidates/
 
 # ─── Fase B.3: klines BTC (proxi régimen, regenerable desde CT 113 feather) ──
 results/btc_2h.csv
+results/pairs_2h.csv
