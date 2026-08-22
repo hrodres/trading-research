@@ -1,11 +1,17 @@
 # trading-research
 
+![License](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Python](https://img.shields.io/badge/python-3.12%2B-blue)
+![Status](https://img.shields.io/badge/status-research-yellow)
+![Exchange](https://img.shields.io/badge/exchange-Coinbase-blue)
+![Engine](https://img.shields.io/badge/engine-freqtrade-orange)
+
 Búsqueda de **edge experto/pro** en crypto (Profit Factor ≥ 1.5 sostenido out-of-sample).
 
-Proyecto de I+D **separado** del bot v9: usa **freqtrade** como andamiaje (backtest OOS, hyperopt) y construye la capa de valor propia — señales (edge), orquestador adaptativo y aprendizaje por acción/omisión.
+Proyecto de I&D de trading cuantitativo en crypto: usa **freqtrade** como andamiaje (backtest OOS, hyperopt) y construye la capa de valor propia — señales (edge), orquestador adaptativo y aprendizaje por acción/omisión.
 
 ## Estado
-- Infra: contenedor Docker `freqtrade` en homelab (CT 112).
+- Infra: contenedor Docker `freqtrade` en homelab.
 - Datos: 9 pares candidatos Coinbase 2h (2020→2026), **sin credenciales**.
 - Edge actual: frontera (~PF 1.2). Objetivo: ≥ 1.5.
 
