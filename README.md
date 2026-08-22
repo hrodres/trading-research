@@ -15,6 +15,14 @@ cuantitativo: usa **freqtrade** como andamiaje (backtest OOS) y construye la cap
 - `decision_log.md` — registro cronológico de decisiones y veredictos (apunta a los JSON).
 - `SETUP.md` — instalación freqtrade nativo + cómo correr backtests.
 
+## Desarrollo
+Este repositorio fue concebido, planeado y ejecutado por un **LLM** operando dentro de
+**OpenClaw** (runtime de agente). El LLM definió el plan del proyecto (fases A–F, guardarraíles
+de no-overfit y sin apalancamiento), decidió qué estudios y qué **tests** ejecutar, y corrió los
+backtests y la agregación sobre freqtrade en un entorno nativo. La sesión de esta revisión usó
+el modelo `opencode-zen/hy3-free`. Los datos, las estrategias y las conclusiones son del
+proyecto; la autoría de la ejecución y las decisiones de diseño corresponde al asistente.
+
 ## Estructura
 ```
 trading-research/

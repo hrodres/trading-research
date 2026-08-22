@@ -39,7 +39,7 @@ def test_short_perp_receives_positive_funding():
 def test_long_implicit_would_pay_positive_funding():
     """Comprobacion de la convencion opuesta: si fuera LONG, pagaria (cashflow neg).
     Usamos la misma funcion pero el signo de la estrategia se modela en el caller;
-    aqui verificamos que el modelo base (SHORT) es el que da cashflow +."""
+    aqui verificamos que la pata SHORT (base del carry) es la que da cashflow +."""
     res = cb.simulate_carry([mk(0.01)], fee_rate=0.0)
     # SHORT: cashflow = +rate = +0.01 -> profit, no loss
     assert res["gross_profit"] == pytest.approx(0.01, abs=1e-9)
