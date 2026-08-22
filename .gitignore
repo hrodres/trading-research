@@ -1,0 +1,36 @@
+# ─── Secretos — NUNCA versionar ───────────────────────────
+*.env
+.env
+.env.*
+*.creds
+creds.json
+config.secrets.json
+*.token
+secrets.*
+**/user_data/config.json
+**/config.json
+
+# ─── Datos de mercado (se descargan, no se versionan) ─────
+**/user_data/data/
+**/*.feather
+**/*.json.gz
+.backtest_data.json
+
+# ─── Estado runtime ───────────────────────────────────────
+**/user_data/trades/
+**/user_data/logs/
+**/*.log
+state.json
+state.json.*
+
+# ─── Python ───────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+*.pyc
+
+# ─── OS ───────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
