@@ -86,3 +86,37 @@ Registro auditable de decisiones y su justificación. (Criterio del PROJECT.md: 
 
 **Siguiente:** B (senal de entrada: regime detection, breakout, pullback, volumen) y C (exits: TP fijo vs trailing vs tiempo) para buscar donde SI hay edge. No se elige universo de pares todavia (seleccion data-driven tras OOS, segun PROJECT.md §8.1).
 
+---
+
+## 2026-08-22 — Fase C: Estudio de exits (resultado)
+
+**Objetivo:** aislar el efecto del EXIT. Se mantiene la MISMA entrada que la baseline de A.3 (close > EMA20 > EMA50) y el mismo SL base -10%. Lo unico que cambia es la mecanica de salida cuando el trade esta en ganancia. Esto separa la pregunta "el exit es malo" de "la senal es mala".
+
+**Variants (todas en `strategies/exit_study.py`, misma entrada):**
+- `ExitFixedWide` : TP +10/5/3% + SL -10% + EMA-cross. Baseline "reparada" (ataque directo a la asimetria SL/TP de A.3).
+- `ExitTrailing`  : trailing asimetrico (offset +10%, positivo +2%) + SL -10%. Deja correr tendencia, protege ganancias.
+- `ExitEmaCross` : SOLO EMA-cross + SL -10% (sin ROI). "Let winners run": sale solo cuando la tendencia se invierte.
+- `ExitTimeStop` : combo (TP+SL+EMA-cross) + tope temporal duro 4 dias.
+
+**Metodo:** mismo que A.3 (walk-forward OOS por ano 2021-2025, 9 pares, sizing fijo 100 USDT, fees 1.2%). Sin fitting en IS -> todo OOS valido por construccion (evita overfit). Se corren las 4 variants en UNA pasada por ano via `--strategy-list` (freqtrade 2026.7 exporta un solo zip con `d["strategy"][nombre]`). Orquestador: `scripts/exit_study.py`. Referencia oficial freqtrade (stoploss.md) usada para el trailing asimetrico.
+
+**Resultado (PF agregado 2021-2025, todas las monedas):**
+| Variant | PF | n | win% | Mejor par (PF) |
+|---|---|---|---|---|
+| ExitEmaCross (dejar correr) | **0.65** | 1581 | 19.7 | SOL 0.98 |
+| ExitTrailing (asim.) | 0.55 | 2208 | 27.6 | SOL 0.71 |
+| ExitFixedWide (TP +10/5/3%) | 0.41 | 3413 | 49.9 | SOL 0.46 |
+| ExitTimeStop (combo + tope 4d) | 0.39 | 3643 | 47.1 | SOL 0.44 |
+
+**Pares que pasan el gate (PF>=1.5, n>=30, 4+yr): NINGUNO.** Mejor celda individual: ExitEmaCross SOL/USDT PF 0.979 (n=186), aun lejos de 1.5.
+
+**Conclusion honesta (esto es lo importante de C):**
+1. **El TP fijo corto era el asesino nº1.** La baseline de A.3 era IDENTICA salvo el TP cap a +8% en vez de dejar correr; pasar a ExitEmaCross (sin cap) sube el PF de ~0.3 a 0.65 (≈2x) solo cambiando el exit. El `minimal_roi` asimetrico destruia la esperanza matematica.
+2. **Cuanto mas dejas correr al ganador, mayor el PF:** EMA-cross (0.65) > trailing (0.55) > fixed-wide (0.41) > time-stop (0.39). El TP fijo corto es lo peor; "let winners run" lo mejor.
+3. **Pero ni el mejor exit llega a 1.5.** El cuello de botella NO es el exit: es la SENAL DE ENTRADA (EMA20>EMA50 no tiene edge real). El exit importa, pero no es suficiente.
+4. **SOL/USDT** es el mejor par en las 4 variants (0.98/0.71/0.46/0.44): consistentemente el mas fuerte, pero aun lejos del gate.
+
+**Decision de diseno:** fijar `ExitTrailing`/`ExitEmaCross` como exit por defecto del proyecto (nunca TP fijo corto) y dirigir el esfuerzo a **Fase B (senal de entrada)**. El exit esta resuelto a nivel de principio; el edge hay que buscarlo en la entrada.
+
+**Siguiente:** Fase B (regime detection + breakout/pullback/volumen, validado OOS).
+

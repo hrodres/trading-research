@@ -32,14 +32,18 @@ trading-research/
 ├── scripts/
 │   ├── screening.py          # Fase A.1: correlación + liquidez por par (Coinbase 2h)
 │   ├── walkforward.py         # Fase A.3: walk-forward OOS por par (freqtrade harness)
+│   ├── exit_study.py          # Fase C: estudio de exits (4 variants, --strategy-list)
 │   └── inspect_export.py      # util: inspecciona estructura del export de freqtrade 2026.7
 ├── strategies/
-│   └── baseline_trend.py     # Fase A.2: estrategia baseline tendencia/momentum
+│   ├── baseline_trend.py     # Fase A.2: estrategia baseline tendencia/momentum
+│   └── exit_study.py         # Fase C: 4 variants de exit (misma entrada)
 ├── configs/
 │   ├── backtest_baseline.json    # config backtest A.2
-│   └── backtest_walkforward.json # config walk-forward A.3 (sizing 100 USDT)
+│   ├── backtest_walkforward.json # config walk-forward A.3 (sizing 100 USDT)
+│   └── backtest_exitstudy.json   # config Fase C (exit study)
 ├── results/
-│   └── walkforward_A3.json   # resultado A.3 (PF por par 2021-2025)
+│   ├── walkforward_A3.json   # resultado A.3 (PF por par 2021-2025)
+│   └── exitstudy_C.json      # resultado C (PF por variant/par 2021-2025)
 ├── tests/
 │   └── test_repo_integrity.py  # CI local: estructura, compilación, sin secretos
 ├── PROJECT.md                # propósito, fases, guardarraíles

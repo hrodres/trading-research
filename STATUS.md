@@ -17,14 +17,14 @@
 ## Fase A — Cimientos de medida (obligatoria)
 - ✅ **A.1 — Screening de pares** (correlación por fecha + liquidez USDT). Ejecutado 2026-08-22. Resultados en `decision_log.md`. Corr 0.58–0.80, BTC↔ETH 0.80, 0 redundantes. Caveats: XRP fuera del gate 4+ años; liquidez fina en DOT/LINK/AVAX/ADA.
 - ✅ **A.2 — Estrategia baseline** (`strategies/baseline_trend.py` + `configs/backtest_baseline.json`). Backtest corre = harness OOS validado. Resultado honesto: PF negativo (baseline de referencia, no edge). Detalles en `decision_log.md`.
-- ✅ **A.3 — Walk-forward OOS por par** (2021-2025, sizing 100 USDT, sin fitting). Ejecutado 2026-08-22. Orquestador `scripts/walkforward.py` + `configs/backtest_walkforward.json`. **Resultado: 0 pares pasan el gate** (PF 0.28-0.40 en todos). La baseline NO tiene edge. Detalles en `decision_log.md` + `results/walkforward_A3.json`.
+- ✅ **A.3 — Walk-forward OOS por par** (2021-2025, sizing 100 USDT, sin fitting). Ejecutado 2026-08-22. Orquestador `scripts/walkforward.py` + `configs/backtest_walkforward.json`. **Resultado: 0 pares pasan el gate** (PF 0.276-0.395 en todos). La baseline NO tiene edge. Detalles en `decision_log.md` + `results/walkforward_A3.json`.
 - ✅ **A.4 — Documentación** en `decision_log.md` + `STATUS.md` + push.
 
 ## Fase B — Señal de entrada
 - ⬜ Regime detection + señales alternativas (breakout, pullback, volumen), validar en OOS.
 
 ## Fase C — Salida (overhaul)
-- ⬜ TP fijo vs trailing vs tiempo, exits escalados, validado OOS.
+- ✅ **C — Estudio de exits** (`strategies/exit_study.py` + `scripts/exit_study.py` + `configs/backtest_exitstudy.json`). Ejecutado 2026-08-22. 4 variants sobre MISMA entrada (EMA20>EMA50), 2021-2025, sizing 100 USDT, sin fitting. **Resultado: 0 variants/par pasan el gate** (mejor PF 0.65 ExitEmaCross; mejor par SOL 0.98). Conclusión: el TP fijo corto era el asesino nº1 (arreglar solo el exit duplica PF vs baseline); el bottleneck real es la ENTRADA → Fase B. Detalles en `decision_log.md` + `results/exitstudy_C.json`.
 
 ## Fase D — Diversificación
 - ⬜ Mean-reversion + funding carry (Kraken/Bybit/OKX, con credenciales) + control de correlación.
@@ -36,4 +36,4 @@
 - ⬜ Si OOS ≥ 1.5 → staging real ($50-100). Si ~1.3 → aceptar o archivar.
 
 ---
-*Última actualización: 2026-08-22 (Fase A.1 completada).*
+*Última actualización: 2026-08-22 (Fase C completada).*
