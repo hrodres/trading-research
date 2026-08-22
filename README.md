@@ -29,16 +29,21 @@ Proyecto de I&D de trading cuantitativo en crypto: usa **freqtrade** como andami
 ## Estructura del repo
 ```
 trading-research/
-├── scripts/            # análisis de datos y utilidades (screening, descarga)
-│   └── screening.py    # Fase A.1: correlación + liquidez por par (Coinbase 2h)
-├── strategies/         # estrategias freqtrade (Fase A.2+), aún vacío
-├── tests/              # tests unitarios (close engine, etc.)
-├── data/               # NO versionado: klines se descargan a demanda
-├── PROJECT.md          # definición y fases
-├── decision_log.md     # log de decisiones
-├── LICENSE             # MIT
+├── scripts/
+│   └── screening.py          # Fase A.1: correlación + liquidez por par (Coinbase 2h)
+├── strategies/               # estrategias freqtrade (Fase A.2+); .gitkeep por ahora
+├── tests/
+│   └── test_repo_integrity.py  # CI local: estructura, compilación, sin secretos
+├── PROJECT.md                # propósito, fases, guardarraíles
+├── STATUS.md                 # checklist de fases (done / in-progress / pending)
+├── decision_log.md           # log auditable de decisiones
+├── CHANGELOG.md              # registro de cambios del repositorio
+├── requirements.txt          # deps de scripts/ (pandas, numpy, pyarrow, pytest)
+├── .gitignore                # excluye secrets, datos y estado runtime
+├── LICENSE                   # MIT
 └── README.md
 ```
+> **Datos NO versionados:** los klines Coinbase 2h viven en el volumen del contenedor freqtrade (`/docker/freqtrade/user_data/data/`), no en el repo (ver `.gitignore`).
 
 ## Principios
 - Sin apalancamiento para inflar el PF.
