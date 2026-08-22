@@ -65,4 +65,11 @@ Registro cronológico de decisiones y resultados. **Los números vivos están en
 - **Sin filtro: patrón espejo EXACTO del long** — TODAS ganan en 2022 (bear): AtrSl 1.54, Partialtp 1.67, Rotation 1.70, VolBreakout 1.47; pierden en bull (2021 PF 0.54–0.71, 2023 0.62–1.05). Mediana PF ~1.0. `results/shortcandidates_summary.csv`.
 - **Con filtro de régimen bear** (`regime_filter.py --direction short`): régimen bear ⇔ close<SMA200 (klines perp, global=BTCUSDT + per-par), None=no operar. PF agregado: global AtrSl 0.850 / Partialtp 1.015 / Rotation 0.970 / VolBreakout 0.919; **per-par AtrSl 1.022 / Partialtp 1.166 / Rotation 1.106 / VolBreakout 0.921**. 2022 per-par se mantiene (1.42–1.75) pero 2025-26 NO cruza (0.78–1.05). `results/regime_filter_short_summary.csv`.
 - **VEREDICTO: ninguna short cruza gate PF≥1.5 OOS** (0–1/5 ventanas ≥1.5). El direccional short, como el long, tiene techo ~1.2 agregado — el filtro bear recorta pérdidas de bull pero no genera edge sostenido en 2025-26. **El carry (7.55) sigue siendo la ÚNICA vía que pasa el gate.**
-- Opciones restantes tras cerrar el direccional (long y short): (a) staging del carry (credenciales + OK Héctor), (b) aceptar techo ~1.2 y archivar el direccional, (c) otra familia de señal (sin fuerza actual de evidencia).
+
+## 16:30 — DECISIÓN FINAL de Héctor: NO a productivo → proyecto ARCHIVADO
+- Héctor: «no voy a cambiar a productivo» → **descartado el staging del carry** (requería credenciales + cuenta real). Sin staging, el carry queda como evidencia de backtest sin validación en vivo, y no hay vía ejecutable que cumpla el gate.
+- **Cierre:** el proyecto se archiva en su punto honesto. Veredicto acumulado:
+  - Direccional LONG (A/B/C/B.2/B.3): techo PF ~1.3 — no alcanza gate 1.5.
+  - Direccional SHORT (B.4): espejo del long, techo ~1.2 — no alcanza gate.
+  - Carry + régimen: PF 7.55 global / 6.88 per-par en seco (TODAS las ventanas ≥3.08) — pasa el gate en backtest, pero es edge de estructura (funding), no direccional, y el propietario no lo llevará a producción → no validable en vivo por decisión explícita.
+- El repo queda como documentación de investigación completa y reproducible (scripts, tests, resultados agregados, decisiones). Si algún día cambia la decisión de staging, el punto de reanudación es `carry_backtest.py` + credenciales de exchange.

@@ -55,7 +55,12 @@
 - ⬜ Kelly fraccionado, maker-only, cap de riesgo por régimen.
 
 ## Fase F — Reevaluar
-- ⬜ Si OOS ≥ 1.5 → staging. Si ~1.3 → aceptar o archivar.
+- ✅ **DECISIÓN FINAL (2026-08-22, Héctor): NO a productivo → proyecto ARCHIVADO.**
+  - Sin staging del carry (requería credenciales + cuenta real; descartado por decisión explícita).
+  - Resultado de investigación: edge direccional LONG y SHORT no alcanza el gate (techo ~1.2–1.3);
+    carry + régimen lo supera en backtest seco (7.55) pero no es validable en vivo por decisión.
+  - El repo queda como investigación completa y reproducible; punto de reanudación si algún día
+    cambia la decisión: `scripts/carry_backtest.py` + credenciales de exchange.
 
 ---
 *Última actualización: 2026-08-22 — Fases A/B/C/B.2/B.3/B.4/D + Selector v1 ejecutadas. Direccional LONG y SHORT: techo ~1.2–1.3 (no alcanzan; el short es espejo del long — gana en bear 2022, pierde en bull). **Carry + filtro de régimen: única señal que pasa PF≥1.5 OOS en TODAS las ventanas (7.55 global, mínimo 3.08)**. Selector v1: selección walk-forward añade valor (long 0.67→1.17) pero el proceso completo no llega a 1.5 (1.245, 2/5 ventanas) — el direccional (long y short) lastra; el carry es la vía validada. Pendiente: staging del carry en vivo o reforzar/gestionar el direccional.*
