@@ -13,8 +13,9 @@ Proyecto de I&D de trading cuantitativo en crypto: usa **freqtrade** como andami
 ## Estado
 - Infra: **freqtrade NATIVO** en CT 113 (`freqtrade-native`, Debian 13, Proxmox 192.168.1.222) — ver `SETUP.md`.
 - Datos: 9 pares candidatos Coinbase 2h (2020→2026), **sin credenciales**.
-- Edge actual spot 2h: **~PF 1.0–1.3 agregado** (Fase D). **GATE PF≥1.5 NO ALCANZADO** con solo spot trend 2h (ver `decision_log.md` + `results/portfolio_D.json`). Siguiente lever real: **funding carry** (D diferido a staging, requiere credenciales).
-- Fases: A ✅ · B ✅ · C ✅ · D (combinatoria) ✅ / carry ⬜ staging · E ⬜ · F ⬜.
+- Edge actual spot 2h: **~PF 1.0–1.3 agregado** (Fase D combinatoria). **GATE PF≥1.5 NO ALCANZADO** con solo spot trend 2h.
+- **Funding carry (Fase D, en SECO 2026-08-22, sin credenciales):** PF agregado **3.447** con datos públicos Binance perp 2021-2025. El carry rompe el techo PF≥1.5 — pero correlación con trend **+0.43/+0.55** (NO diversifica; concentra riesgo de régimen). 2022 (bajista) cae a PF 0.51. Pendiente: validar en staging (requiere credenciales + OK Héctor).
+- Fases: A ✅ · B ✅ · C ✅ · D (combinatoria + carry en seco) ✅ / carry staging ⬜ · E ⬜ · F ⬜.
 
 ## Cómo funciona
 1. **Fase A** — Medir bien (walk-forward OOS, fees + slippage).
@@ -36,6 +37,7 @@ trading-research/
 │   ├── exit_study.py          # Fase C: estudio de exits (4 variants, --strategy-list)
 │   ├── entry_study.py         # Fase B: estudio de entradas (6 variants, --strategy-list)
 │   ├── portfolio_d.py         # Fase D: agregación de portfolio OOS (stdlib, sin freqtrade)
+│   ├── carry_backtest.py      # Fase D (carry): funding carry en SECO (Binance perp público, sin creds)
 │   └── inspect_export.py      # util: inspecciona estructura del export de freqtrade 2026.7
 ├── strategies/
 │   ├── baseline_trend.py     # Fase A.2: estrategia baseline tendencia/momentum
@@ -51,8 +53,10 @@ trading-research/
 │   ├── exitstudy_C.json      # resultado C (PF por variant/par 2021-2025)
 │   ├── entrystudy_B.json     # resultado B (PF por variant/par 2021-2025)
 │   ├── trades_B.json         # RAW OOS: trades crudos 2021-2025 (6622) p/ agregación D [derivado; regenerable]
-│   ├── portfolio_D.json      # resultado D (consolidado: escenarios + veredicto)
+│   ├── portfolio_D.json      # resultado D (consolidado combinatoria: escenarios + veredicto)
 │   ├── portfolio_D_all.json  # D: matriz de correlación completa (54 celdas)
+│   ├── carry_D_taker.json    # D carry: PF por par/año + correlación vs trend (fee taker 0.1%)
+│   ├── carry_D_maker.json    # D carry: idem (fee maker 0.02%)
 │   └── entrystudy_v9style.json  # ANEXO FORENSE aislado (NO canónico) — EntryV9Style, casi inerte (PF 0.0, 5 trades/5a)
 ├── tests/
 │   └── test_repo_integrity.py  # CI local: estructura, compilación, sin secretos

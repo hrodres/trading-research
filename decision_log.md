@@ -194,3 +194,29 @@ Registro auditable de decisiones y su justificación. (Criterio del PROJECT.md: 
 
 **Evidencia:** `results/portfolio_D.json` (consolidado), `results/portfolio_D_all.json` y `results/portfolio_D_top10.json` (matrices de correlación completas), `results/trades_B.json` (trade-level OOS).
 
+## 2026-08-22 — Fase D (carry) — Backtest en SECO de funding carry (COMPLETADO, sin credenciales)
+
+**Autorizado por Héctor (04:36) en modo paper: sin cuenta, sin $ real, solo datos públicos.**
+
+**Método:** `scripts/carry_backtest.py` (stdlib puro). Descarga fundingRate histórico 8h de **Binance USDT-M perp vía API pública** (sin API key) para 9 pares, 2021-01→2025-12 (49.377 eventos). Simula hold continuo **long spot + short perp 1:1** (cashflow SHORT = +rate·notional: cobra funding positivo). Fee round-trip = 4 láminas (taker 0.1% / maker 0.02%). PF = sum(cashflows +)/sum(|cashflows −|). Compara correlación mensual vs trend de Fase B y desglosa por año.
+
+**Resultado (PF de la corriente de funding, agregado 9 pares):**
+| Régimen fee | PF agregado | Net P&L (notional=1) | Mejor par (PF) | Peor par |
+|---|---|---|---|---|
+| Taker 0.1% | **3.447** | +4.5581 | LINKUSDT 17.70 / BTCUSDT 18.22 | BNBUSDT 0.90 (neto −0.05) |
+| Maker 0.02% | 3.447 | +4.5581 | — | — |
+- % de eventos con funding positivo: **80.7%** (39.867) vs 19.3% negativos (9.510). Rate medio 0.0092%/8h.
+- **Por año (TAKER):** 2021 PF 9.16 (neto +3.19) · 2022 PF **0.51 (neto −0.42)** · 2023 PF 2.96 (+0.52) · 2024 PF 8.11 (+1.01) · 2025 PF 2.29 (+0.25). **El carry cae por debajo de 1 solo en 2022 (año bajista)**.
+- **Correlación con el trend de Fase B: POSITIVA (+0.43 a +0.55)**, NO negativa. El carry NO diversifica el riesgo de régimen: es otra apuesta a que el mercado siga alcista. En 2022 (bajista) el carry pierde y el trend también.
+
+**Veredicto honesto de Fase D (carry):**
+1. **SÍ rompe el techo PF≥1.5** — PF agregado 3.4, muy por encima del 1.5 del gate. El carry es el lever real que el spot trend (~1.0–1.3) no podía dar.
+2. **PERO NO es diversificación de riesgo** — correlación positiva con el trend. Sumar carry al portfolio sube el PF pero **concentra** la exposición al régimen alcista. No reparte el riesgo; lo amplifica en una dirección.
+3. **Dependencia de régimen:** en años bajistas (2022) el carry es neto negativo (PF 0.51). No es un edge direccional-neutral real; es una apuesta estructural a que el funding siga positivo (lo cual ocurre ~80% del tiempo en crypto, pero no siempre).
+4. **Datos honestos sobre venue:** usé Binance perp funding (público) vs Coinbase spot de Fase B. No es el mismo exchange ni el mismo producto; el punto era comparar corrientes de retorno, no replicar venue. Para staging real habrá que usar un venue consistente (Kraken/Bybit/OKX según PROJECT.md) y validar funding + ejecución allí.
+5. **Riesgos NO modelados en seco** (de la charla previa con Héctor): liquidación de la short perp si el precio sube sin margen, basis risk, funding negativo prolongado, riesgo de exchange (contraparte/hackeo/delisting). El backtest asume cobertura perfecta 1:1 y sin coste de mantener spot — en vivo hay slippage, préstamo de spot y gap de base.
+
+**Conclusión de Fase D completa:** el edge PF≥1.5 EXISTE vía carry (en papel, 2021-2025). El proyecto NO está agotado; la vía real es carry, no spot trend. Pero el carry es riesgo de régimen concentrado, no diversificación mágica. **Siguiente paso (Fase E/F + staging):** solo tras OK explícito de Héctor y con credenciales de un venue top-tier, abrir staging con $50–100, validar funding + ejecución real, y medir PF neto con todos los costes. Sin OK y sin credenciales: NADA en vivo.
+
+**Evidencia:** `scripts/carry_backtest.py`, `tests/test_carry_backtest.py` (9 tests, incl. regresión del bug de signo), `results/carry_D_taker.json` + `results/carry_D_maker.json` (desglose por par/año/correlación), `results/funding_raw.json` (datos crudos, 1.3 MB, NO versionado — regenerable).
+
