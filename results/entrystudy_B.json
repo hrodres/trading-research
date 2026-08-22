@@ -2147,62 +2147,6 @@
           }
         }
       }
-    },
-    "EntryV9Style": {
-      "overall": {
-        "gross_profit": 0.0,
-        "gross_loss": 15.31,
-        "n_trades": 5,
-        "win_pct": 0.0,
-        "pf": 0.0
-      },
-      "best_pair": {
-        "pair": "BTC/USDT",
-        "pf": 0.0
-      },
-      "pairs_passing_gate": [],
-      "by_pair": {
-        "BTC/USDT": {
-          "gross_profit": 0.0,
-          "gross_loss": 9.73,
-          "n_trades": 3,
-          "win_pct": 0.0,
-          "pf": 0.0,
-          "long_history": true,
-          "passes_gate": false,
-          "by_year": {
-            "2022": {
-              "gp": 0.0,
-              "gl": 7.49,
-              "n": 2,
-              "pf": 0.0
-            },
-            "2025": {
-              "gp": 0.0,
-              "gl": 2.23,
-              "n": 1,
-              "pf": 0.0
-            }
-          }
-        },
-        "ETH/USDT": {
-          "gross_profit": 0.0,
-          "gross_loss": 5.58,
-          "n_trades": 2,
-          "win_pct": 0.0,
-          "pf": 0.0,
-          "long_history": true,
-          "passes_gate": false,
-          "by_year": {
-            "2023": {
-              "gp": 0.0,
-              "gl": 5.58,
-              "n": 2,
-              "pf": 0.0
-            }
-          }
-        }
-      }
     }
   },
   "best_overall_variant": "EntryTrendADX"

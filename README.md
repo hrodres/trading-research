@@ -33,7 +33,7 @@ trading-research/
 │   ├── screening.py          # Fase A.1: correlación + liquidez por par (Coinbase 2h)
 │   ├── walkforward.py         # Fase A.3: walk-forward OOS por par (freqtrade harness)
 │   ├── exit_study.py          # Fase C: estudio de exits (4 variants, --strategy-list)
-│   ├── entry_study.py         # Fase B: estudio de entradas (7 variants, --strategy-list)
+│   ├── entry_study.py         # Fase B: estudio de entradas (6 variants, --strategy-list)
 │   └── inspect_export.py      # util: inspecciona estructura del export de freqtrade 2026.7
 ├── strategies/
 │   ├── baseline_trend.py     # Fase A.2: estrategia baseline tendencia/momentum

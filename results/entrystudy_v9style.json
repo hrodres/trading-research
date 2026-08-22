@@ -1,0 +1,62 @@
+{
+  "note": "ANEXO FORENSE (a peticion del usuario 03:46 UTC). NO forma parte del estudio Fase B. Replica el ESTILO de entrada de v9 (score_bull>=2 de 3 senales). Mismo exit de C, walk-forward 2021-2025. Resultado: CASI INERTE (5 trades en 5 anos, PF 0.0, win 0%). La senal de v9 no tiene edge por si sola.",
+  "best_overall_variant": "EntryV9Style",
+  "variants": {
+    "EntryV9Style": {
+      "overall": {
+        "gross_profit": 0.0,
+        "gross_loss": 15.31,
+        "n_trades": 5,
+        "win_pct": 0.0,
+        "pf": 0.0
+      },
+      "best_pair": {
+        "pair": "BTC/USDT",
+        "pf": 0.0
+      },
+      "pairs_passing_gate": [],
+      "by_pair": {
+        "BTC/USDT": {
+          "gross_profit": 0.0,
+          "gross_loss": 9.73,
+          "n_trades": 3,
+          "win_pct": 0.0,
+          "pf": 0.0,
+          "long_history": true,
+          "passes_gate": false,
+          "by_year": {
+            "2022": {
+              "gp": 0.0,
+              "gl": 7.49,
+              "n": 2,
+              "pf": 0.0
+            },
+            "2025": {
+              "gp": 0.0,
+              "gl": 2.23,
+              "n": 1,
+              "pf": 0.0
+            }
+          }
+        },
+        "ETH/USDT": {
+          "gross_profit": 0.0,
+          "gross_loss": 5.58,
+          "n_trades": 2,
+          "win_pct": 0.0,
+          "pf": 0.0,
+          "long_history": true,
+          "passes_gate": false,
+          "by_year": {
+            "2023": {
+              "gp": 0.0,
+              "gl": 5.58,
+              "n": 2,
+              "pf": 0.0
+            }
+          }
+        }
+      }
+    }
+  }
+}

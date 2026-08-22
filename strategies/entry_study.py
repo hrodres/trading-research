@@ -18,10 +18,12 @@ Variants de ENTRADA (mismos indicadores base cuando aplica):
   - EntryPullback  : EMA20>EMA50 + precio cerca de EMA20 (pullback) + RSI gira up
   - EntryVolConfirm: EMA20>EMA50 + volumen > 1.5x media 20v
   - EntryMeanRev   : RSI<30 en rango (cierre < EMA50)  [contraste: contra-tendencia]
-  - EntryV9Style  : estilo de ENTRADA del bot v9 (forense). >=2 de 3 senales:
-                  momentum (precio>SMA20 y RSI 45-65) + volume_support (cerca de
-                  soporte 50v) + engulfing_bull (RSI<=40, vol>=1.2x media).
-                  Replica el *estilo* de la senal de v9, no el sistema (sin Binance/testnet).
+
+  [NOTA FORENSE] EntryV9Style es UNA SOLA variant aislada, anadida a peticion del
+  usuario (03:46 UTC) para cerrar la duda sobre la senal de entrada de v9. NO es
+  parte de la busqueda de edge del proyecto y queda FUERA de VARIANTS por defecto
+  (ver scripts/entry_study.py). Resultado: casi inerte (5 trades/5 anos, PF 0.0).
+  No usar como candidata en Fase D ni en ningun estudio canonico.
 
 Metodo OOS: 5 ventanas anuales (2021-2025), 9 pares, sizing fijo 100 USDT,
 fees 0.001. Sin fitting en IS -> todo OOS por construccion (evita overfit).
@@ -155,20 +157,19 @@ class EntryMeanRev(EntryStudyBase):
 
 
 class EntryV9Style(EntryStudyBase):
-    """Estilo de ENTRADA del bot v9 (forense, por curiosidad).
+    """ESTILO DE ENTRADA DEL BOT v9 — VARIANT FORENSE (NO CANONICA).
+
+    Anadida a peticion del usuario (03:46 UTC) para cerrar una duda sobre v9.
+    NO forma parte de la busqueda de edge del proyecto: queda FUERA de VARIANTS
+    por defecto en scripts/entry_study.py. Resultado forense ya documentado en
+    results/entrystudy_v9style.json (CASI INERTE: 5 trades en 5 anos, PF 0.0, win 0%).
+    No usar como candidata en Fase D ni en estudios canonicos.
 
     Replica el *estilo* de `evaluate_long_entry` de v9: entra LONG cuando
     >=2 de 3 senales disparan (score_bull). NO es el sistema v9 (sin OCO,
     sin testnet/Binance, sin perfiles de riesgo): solo la senal de entrada,
     corriendo en freqtrade con datos Coinbase 2h y el exit comun de Fase C.
-
-    Senales (mapeadas de engine.py):
-      - momentum     : close > SMA20 y 45 <= RSI(14) <= 65
-      - volume_support: close dentro de +/-1% del soporte (min low 50v)
-      - engulfing_bull: vela bullish engulfing (open<close, prev open>close),
-                        RSI<=40, vol >= 1.2x media 21v
-    Entra si (momentum + volume_support + engulfing) >= 2.
-    """
+","""
     name = "EntryV9Style"
 
     def populate_indicators(self, dataframe, metadata):
