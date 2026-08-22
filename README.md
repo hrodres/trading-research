@@ -48,14 +48,15 @@ trading-research/
 │   └── test_repo_integrity.py  # CI local: estructura, compilación, sin secretos
 ├── PROJECT.md                # propósito, fases, guardarraíles
 ├── STATUS.md                 # checklist de fases (done / in-progress / pending)
+├── SETUP.md                  # instalación freqtrade NATIVO (CT 113, sin Docker) + cómo correr backtests
 ├── decision_log.md           # log auditable de decisiones
 ├── CHANGELOG.md              # registro de cambios del repositorio
-├── requirements.txt          # deps de scripts/ (pandas, numpy, pyarrow, pytest)
+├── requirements.txt          # freqtrade==2026.7 + pyarrow + pandas/numpy/pytest
 ├── .gitignore                # excluye secrets, datos y estado runtime
 ├── LICENSE                   # MIT
 └── README.md
 ```
-> **Datos NO versionados:** los klines Coinbase 2h viven en el volumen del contenedor freqtrade (`/docker/freqtrade/user_data/data/coinbase/`), no en el repo (ver `.gitignore`).
+> **Datos NO versionados:** los klines Coinbase 2h viven en `/opt/freqtrade/user_data/data/coinbase/` dentro de **CT 113** (freqtrade nativo, sin Docker), no en el repo (ver `.gitignore` y `SETUP.md`).
 
 ## Principios
 - Sin apalancamiento para inflar el PF.

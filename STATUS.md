@@ -12,6 +12,7 @@
 - ✅ `requirements.txt` (entorno reproducible para scripts/).
 - ✅ `CHANGELOG.md`.
 - ✅ `strategies/baseline_trend.py` + `configs/backtest_baseline.json` (Fase A.2).
+- ✅ `SETUP.md`: freqtrade **nativo** en CT 113 (Debian 13, sin Docker). Instalación reproducible + cómo correr backtests. Docker `freqtrade` de CT 112 deshabilitado (restart=no).
 - ⬜ CI (`.github/workflows/ci.yml`): **NO añadido** — el PAT no tiene scope `workflow`. Los gates (py_compile/pytest/scan) se corren en local antes de cada push.
 
 ## Fase A — Cimientos de medida (obligatoria)

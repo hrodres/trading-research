@@ -1,7 +1,15 @@
-# trading-research — dependencias de análisis (scripts/)
-# freqtrade corre en su propio contenedor Docker (imagen freqtradeorg/freqtrade:stable)
-# con dependencias fijadas por la imagen; aquí solo lo que corremos localmente.
+# trading-research — dependencias
+#
+# Fase de ejecución de backtests: FREQTRADE NATIVO (sin Docker) en CT 113
+# (Debian 13, venv en /opt/ft). Instalado con:
+#   apt-get install -y python3-venv libta-lib-dev
+#   python3 -m venv /opt/ft && /opt/ft/bin/pip install -r requirements.txt
+# Versiones fijadas por freqtrade 2026.7 (verificado: freqtrade 2026.7, ccxt 4.5.75,
+# Python 3.13.5, TA-Lib 0.7.1). freqtrade arrastra pandas/numpy/pyarrow/ccxt.
+freqtrade==2026.7
+pyarrow>=14.0   # lectura de klines .feather
+
+# Scripts de análisis locales (scripts/) y tests (tests/)
 pandas>=2.0
 numpy>=1.24
-pyarrow>=14.0   # lectura de klines .feather generados por freqtrade
-pytest>=7.0     # tests/ (CI)
+pytest>=7.0     # tests/ (CI local)
