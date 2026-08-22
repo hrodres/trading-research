@@ -22,7 +22,9 @@ Proyecto de I&D de trading cuantitativo en crypto: usa **freqtrade** como andami
 
 ## Documentación
 - `PROJECT.md` — propósito, criterios de éxito, guardarraíles, fases.
+- `STATUS.md` — **checklist de fases** (qué está done / in-progress / pending).
 - `decision_log.md` — decisiones y su justificación (auditable).
+- `CHANGELOG.md` — registro de cambios del repositorio.
 
 ## Estructura del repo
 ```
