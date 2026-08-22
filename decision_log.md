@@ -53,3 +53,9 @@ Registro cronológico de decisiones y resultados. **Los números vivos están en
 - Resultado (mismo modelo que carry_D.json, fees taker 0.001): PF agregado ALL 3.447 → **GLOBAL 7.551 / PERPAR 6.879**; GL agregado cae de 1.863 a 0.341/0.298 (se cortan las pérdidas del bear). Por año, TODAS las ventanas ≥ 3.08: 2022 pasa de 0.51 → 3.18/3.09.
 - Coste: net baja (4.52 → 2.20/1.72) porque solo se opera en bull (~47% de eventos, el resto apagado). Trade-off calidad vs cantidad: a favor de calidad si el objetivo es PF (gate).
 - **Primera señal del proyecto que pasa el gate PF≥1.5 OOS en TODAS las ventanas.** Evidence: `results/carry_regime_summary.csv`. Lectura: el selector (régimen) ya tiene 1 mecanismo con edge validado; falta staging (credenciales) para ejecución real.
+
+## 10:37 — Selector v1: primer meta-controlador walk-forward (visión hecha código)
+- Diseño A PRIORI: pool de 4 longs B.2 + régimen (SMA200 2h BTC, sin lookahead) + selección WF 1-lookback (estrategia de mejor PF bull en ventana anterior; primera ventana = ensemble del pool) + carry en bull. Métrica: PF del PROCESO.
+- Resultado: **el selector LONG (régimen+WF) sube PF de 0.669 (pool crudo) a 1.172** — seleccionar añade valor real (2023: 1.684, 2024: 1.596); WF eligió VolBreakoutLong en todas las ventanas tras la primera.
+- **Proceso completo PF 1.245 (2/5 ventanas ≥1.5)** — el long direccional lastra en 2022 (0.584) y 2025 (0.825); el carry solo pasa el gate en todas (7.55). Dato de diseño: al sumar long(%) + carry(rate) en una sola métrica hay caveat de escala (documentado en el script).
+- Lectura: el meta-controlador funciona como CEREBRO (la selección mejora al pool), pero con el pool actual de longs no basta; la vía validada y fuerte es el carry. Siguientes opciones: (a) staging del carry (credenciales, cuenta pequeña), (b) reducir el peso/presencia del long en el proceso, (c) validar el short para dar al selector un brazo bajista.

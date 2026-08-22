@@ -1,0 +1,6 @@
+ventana,seleccion,n_long,pf_long,pf_pool_sin_regimen,n_carry,pf_carry,pf_proceso
+20210101-20211231,"pool (ensemble, sin historial)",267,1.138,1.025,2862,18.43,1.189
+20220101-20221231,WF 1-lookback → VolBreakoutLong,65,0.538,0.351,3609,3.182,0.584
+20230101-20231231,WF 1-lookback → VolBreakoutLong,124,1.684,0.915,5994,4.701,1.765
+20240101-20241231,WF 1-lookback → VolBreakoutLong,114,1.596,0.986,5904,13.837,1.745
+20250101-20260601,WF 1-lookback → VolBreakoutLong,96,0.774,0.373,4635,4.797,0.825

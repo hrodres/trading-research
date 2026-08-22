@@ -41,6 +41,7 @@
 - ✅ **D combinatoria**: PF agregado top-10 = **1.063** (todas las monedas) / **0.963** (gate-compliant sin XRP) — INFERIOR a la mejor celda (1.283). Correlación intra-par 0.95–0.99 → no diversifica. `results/portfolio_D.json`.
 - ✅ **D carry (en SECO, sin credenciales)**: funding carry long spot + short perp 1:1, Binance perp 2021–2025 → PF agregado **3.447** (rompe gate). Pero correlación vs trend +0.43/+0.55 (NO diversifica; concentra riesgo de régimen). 2022 cae a PF 0.51. `results/carry_D.json`.
 - ✅ **D.2 carry + filtro de régimen** (`scripts/carry_regime.py`): aplicar el componente 1 del selector al carry → **TODAS las ventanas ≥ PF 3.0 y PF agregado 7.55 (global) / 6.88 (per-par)**. 2022 pasa de 0.51 → 3.18. El filtro corta el problema del bear (GL de 1.86 → 0.34). net baja (2.20 vs 4.52: opera solo ~47% del tiempo, en bull) pero calidad riesgo mucho mayor. Primera señal que pasa el gate OOS en TODAS las ventanas. `results/carry_regime_summary.csv`.
+- ✅ **Selector v1** (`scripts/selector_v1.py`): primer meta-controlador walk-forward (régimen + selección WF 1-lookback + carry, sin lookahead). El selector LONG (régimen+WF) sube el PF del pool de 0.669 → **1.172** (seleccionar añade valor real: 2023 1.684, 2024 1.596 en bull). Pero el PROCESO completo (long+carry, % combinado) da PF agregado **1.245** con 2/5 ventanas ≥1.5 (2022: 0.584, 2025: 0.825 lastran): el long direccional sigue siendo el lastre, el CARRY es el componente que pasa el gate solo (7.55). `results/selector_v1_summary.csv`.
 - ⬜ **Carry en staging** (requiere credenciales + OK): pendiente.
 - ⬜ **Mean-reversion**: descartada (EntryMeanRev PF 0.066).
 
@@ -51,4 +52,4 @@
 - ⬜ Si OOS ≥ 1.5 → staging. Si ~1.3 → aceptar o archivar.
 
 ---
-*Última actualización: 2026-08-22 — Fases A/B/C/B.2/B.3/D ejecutadas. Direccional: techo ~1.3 (no alcanza PF≥1.5). **Carry + filtro de régimen: única señal que pasa PF≥1.5 OOS en TODAS las ventanas (agregado 7.55 global / 6.88 per-par, mínimo 3.08 en 2022)**. Pendiente: staging en vivo para validar ejecución.*
+*Última actualización: 2026-08-22 — Fases A/B/C/B.2/B.3/D + Selector v1 ejecutadas. Direccional: techo ~1.3 (no alcanza). **Carry + filtro de régimen: única señal que pasa PF≥1.5 OOS en TODAS las ventanas (7.55 global, mínimo 3.08)**. Selector v1: selección walk-forward añade valor (long 0.67→1.17) pero el proceso completo no llega a 1.5 (1.245, 2/5 ventanas) — el long direccional lastra; el carry es la vía validada. Pendiente: staging del carry en vivo o reforzar/gestionar el long.*
