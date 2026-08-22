@@ -34,3 +34,6 @@ venv/
 # ─── OS ───────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
+
+# ─── Fase D: raw trades OOS (regenerable desde zips freqtrade CT 113) ──
+results/trades_B.json

@@ -1,0 +1,134 @@
+{
+  "label": "auto-top10",
+  "summary": {
+    "n_trades": 1182,
+    "win_pct": 24.6,
+    "pf": 1.063,
+    "max_drawdown_pct": 107.09,
+    "sharpe_annualized": 0.114,
+    "net_pnl_usdt": 342.63
+  },
+  "correlation": {
+    "EntryTrend:SOL/USDT": {
+      "EntryTrend:SOL/USDT": 1.0,
+      "EntryTrendADX:DOGE/USDT": 0.295,
+      "EntryTrendADX:SOL/USDT": 0.954,
+      "EntryBreakout:SOL/USDT": 0.972,
+      "EntryPullback:SOL/USDT": 0.952,
+      "EntryVolConfirm:SOL/USDT": 0.975,
+      "EntryTrend:XRP/USDT": 0.244,
+      "EntryTrendADX:XRP/USDT": 0.217,
+      "EntryBreakout:XRP/USDT": 0.225,
+      "EntryVolConfirm:XRP/USDT": 0.208
+    },
+    "EntryTrendADX:DOGE/USDT": {
+      "EntryTrend:SOL/USDT": 0.295,
+      "EntryTrendADX:DOGE/USDT": 1.0,
+      "EntryTrendADX:SOL/USDT": 0.254,
+      "EntryBreakout:SOL/USDT": 0.238,
+      "EntryPullback:SOL/USDT": 0.306,
+      "EntryVolConfirm:SOL/USDT": 0.223,
+      "EntryTrend:XRP/USDT": 0.477,
+      "EntryTrendADX:XRP/USDT": 0.443,
+      "EntryBreakout:XRP/USDT": 0.47,
+      "EntryVolConfirm:XRP/USDT": 0.446
+    },
+    "EntryTrendADX:SOL/USDT": {
+      "EntryTrend:SOL/USDT": 0.954,
+      "EntryTrendADX:DOGE/USDT": 0.254,
+      "EntryTrendADX:SOL/USDT": 1.0,
+      "EntryBreakout:SOL/USDT": 0.962,
+      "EntryPullback:SOL/USDT": 0.945,
+      "EntryVolConfirm:SOL/USDT": 0.954,
+      "EntryTrend:XRP/USDT": 0.312,
+      "EntryTrendADX:XRP/USDT": 0.294,
+      "EntryBreakout:XRP/USDT": 0.277,
+      "EntryVolConfirm:XRP/USDT": 0.283
+    },
+    "EntryBreakout:SOL/USDT": {
+      "EntryTrend:SOL/USDT": 0.972,
+      "EntryTrendADX:DOGE/USDT": 0.238,
+      "EntryTrendADX:SOL/USDT": 0.962,
+      "EntryBreakout:SOL/USDT": 1.0,
+      "EntryPullback:SOL/USDT": 0.951,
+      "EntryVolConfirm:SOL/USDT": 0.982,
+      "EntryTrend:XRP/USDT": 0.272,
+      "EntryTrendADX:XRP/USDT": 0.25,
+      "EntryBreakout:XRP/USDT": 0.244,
+      "EntryVolConfirm:XRP/USDT": 0.23
+    },
+    "EntryPullback:SOL/USDT": {
+      "EntryTrend:SOL/USDT": 0.952,
+      "EntryTrendADX:DOGE/USDT": 0.306,
+      "EntryTrendADX:SOL/USDT": 0.945,
+      "EntryBreakout:SOL/USDT": 0.951,
+      "EntryPullback:SOL/USDT": 1.0,
+      "EntryVolConfirm:SOL/USDT": 0.953,
+      "EntryTrend:XRP/USDT": 0.231,
+      "EntryTrendADX:XRP/USDT": 0.197,
+      "EntryBreakout:XRP/USDT": 0.198,
+      "EntryVolConfirm:XRP/USDT": 0.19
+    },
+    "EntryVolConfirm:SOL/USDT": {
+      "EntryTrend:SOL/USDT": 0.975,
+      "EntryTrendADX:DOGE/USDT": 0.223,
+      "EntryTrendADX:SOL/USDT": 0.954,
+      "EntryBreakout:SOL/USDT": 0.982,
+      "EntryPullback:SOL/USDT": 0.953,
+      "EntryVolConfirm:SOL/USDT": 1.0,
+      "EntryTrend:XRP/USDT": 0.218,
+      "EntryTrendADX:XRP/USDT": 0.193,
+      "EntryBreakout:XRP/USDT": 0.18,
+      "EntryVolConfirm:XRP/USDT": 0.181
+    },
+    "EntryTrend:XRP/USDT": {
+      "EntryTrend:SOL/USDT": 0.244,
+      "EntryTrendADX:DOGE/USDT": 0.477,
+      "EntryTrendADX:SOL/USDT": 0.312,
+      "EntryBreakout:SOL/USDT": 0.272,
+      "EntryPullback:SOL/USDT": 0.231,
+      "EntryVolConfirm:SOL/USDT": 0.218,
+      "EntryTrend:XRP/USDT": 1.0,
+      "EntryTrendADX:XRP/USDT": 0.972,
+      "EntryBreakout:XRP/USDT": 0.962,
+      "EntryVolConfirm:XRP/USDT": 0.981
+    },
+    "EntryTrendADX:XRP/USDT": {
+      "EntryTrend:SOL/USDT": 0.217,
+      "EntryTrendADX:DOGE/USDT": 0.443,
+      "EntryTrendADX:SOL/USDT": 0.294,
+      "EntryBreakout:SOL/USDT": 0.25,
+      "EntryPullback:SOL/USDT": 0.197,
+      "EntryVolConfirm:SOL/USDT": 0.193,
+      "EntryTrend:XRP/USDT": 0.972,
+      "EntryTrendADX:XRP/USDT": 1.0,
+      "EntryBreakout:XRP/USDT": 0.95,
+      "EntryVolConfirm:XRP/USDT": 0.979
+    },
+    "EntryBreakout:XRP/USDT": {
+      "EntryTrend:SOL/USDT": 0.225,
+      "EntryTrendADX:DOGE/USDT": 0.47,
+      "EntryTrendADX:SOL/USDT": 0.277,
+      "EntryBreakout:SOL/USDT": 0.244,
+      "EntryPullback:SOL/USDT": 0.198,
+      "EntryVolConfirm:SOL/USDT": 0.18,
+      "EntryTrend:XRP/USDT": 0.962,
+      "EntryTrendADX:XRP/USDT": 0.95,
+      "EntryBreakout:XRP/USDT": 1.0,
+      "EntryVolConfirm:XRP/USDT": 0.973
+    },
+    "EntryVolConfirm:XRP/USDT": {
+      "EntryTrend:SOL/USDT": 0.208,
+      "EntryTrendADX:DOGE/USDT": 0.446,
+      "EntryTrendADX:SOL/USDT": 0.283,
+      "EntryBreakout:SOL/USDT": 0.23,
+      "EntryPullback:SOL/USDT": 0.19,
+      "EntryVolConfirm:SOL/USDT": 0.181,
+      "EntryTrend:XRP/USDT": 0.981,
+      "EntryTrendADX:XRP/USDT": 0.979,
+      "EntryBreakout:XRP/USDT": 0.973,
+      "EntryVolConfirm:XRP/USDT": 1.0
+    }
+  },
+  "n_strategies": 10
+}

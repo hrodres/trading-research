@@ -28,7 +28,9 @@
 - ✅ **C — Estudio de exits** (`strategies/exit_study.py` + `scripts/exit_study.py` + `configs/backtest_exitstudy.json`). Ejecutado 2026-08-22. 4 variants sobre MISMA entrada (EMA20>EMA50), 2021-2025, sizing 100 USDT, sin fitting. **Resultado: 0 variants/par pasan el gate** (mejor PF 0.65 ExitEmaCross; mejor par SOL 0.98). Conclusión: el TP fijo corto era el asesino nº1 (arreglar solo el exit duplica PF vs baseline); el bottleneck real es la ENTRADA → Fase B. Detalles en `decision_log.md` + `results/exitstudy_C.json`.
 
 ## Fase D — Diversificación
-- ⬜ Mean-reversion + funding carry (Kraken/Bybit/OKX, con credenciales) + control de correlación.
+- ⬜ **D (combinatoria/correlación) — EJECUTADA 2026-08-22**: harness `scripts/portfolio_d.py` + `tests/test_portfolio_d.py` (15 passed) + `results/trades_B.json` (6622 trades OOS de Fase B). PF agregado top-10 = **1.063** (todas las monedas) / **0.963** (gate-compliant sin XRP) — **INFERIOR a la mejor celda aislada (1.283)**. Correlación intra-par trend 0.95–0.99 → combinar trend correlacionado NO aporta diversificación. **GATE NO ALCANZADO: PF≥1.5 imposible con spot trend 2h solo.**
+- ⬜ **Funding carry** (perpetuos Kraken/Bybit/OKX, **requiere credenciales**) — **DIFERIDO a staging** (PROJECT.md §4). Es la única pata de D que puede romper el techo PF≥1.5 (alpha estructural casi market-neutral). No ejecutable hoy sin OK + credenciales.
+- ⬜ **Mean-reversion** — descartada (EntryMeanRev Fase B PF 0.066, desastrosa en 2h spot).
 
 ## Fase E — Sizing y ejecución
 - ⬜ Kelly fraccionado, maker-only, cap de riesgo por régimen.

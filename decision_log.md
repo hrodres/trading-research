@@ -162,3 +162,35 @@ Registro auditable de decisiones y su justificación. (Criterio del PROJECT.md: 
 - **RESULTADO: casi INERTE.** Solo **5 trades en 5 años** (3 BTC, 2 ETH), en SOL/XRP/ADA/DOGE/DOT/AVAX/LINK no disparó NUNCA. PF=0.0, win 0%.
 - **Conclusión de la curiosidad:** la señal de entrada de v9 replicada fielmente NO tiene edge — ni siquiera genera suficientes trades para medirla (n=5). Confirma que v9 no se quedaba en PF~1.2 solo por el perfil de riesgo 2x: **la entrada en sí es mala/inactiva** en 2h spot. El sistema completo sobrevivía por apalancamiento + gestión, no por la señal. No es candidata; queda como registro forense.
 
+## 2026-08-22 — Fase D: Diversificación de portfolio (COMPLETADA, resultado honesto)
+
+**Objetivo:** medir si combinar múltiples estrategias/pares NO correlacionadas levanta el PF agregado y baja el DD (el multiplicador real de la diversificación, según PROJECT.md Fase D).
+
+**Diseño (honesto sobre el alcance):**
+- PROJECT.md define Fase D como *Mean-reversion + funding carry + control de correlación*. De esas 3 patas:
+  - **Mean-reversion** ya se probó en Fase B (`EntryMeanRev`, PF 0.066) → desastroso en 2h spot. Descartado.
+  - **Funding carry** (perpetuos Kraken/Bybit/OKX) es la verdadera fuente de alpha estructural, pero **requiere credenciales** → diferido a staging por el propio PROJECT.md. NO se puede medir hoy.
+  - **Control de correlación / combinatoria** → esto SÍ se hace ya. Es la única pata de Fase D ejecutable sin credenciales.
+- Harness: `scripts/portfolio_d.py` (stdlib puro, sin freqtrade/numpy — corre en cualquier host). Entrada: `results/trades_B.json` (6622 trades crudos OOS de Fase B, extraídos de los zips canónicos 03:34, walk-forward 2021-2025, sizing fijo 100 USDT/trade). Mide PF agregado, curva de equity, max drawdown pico-a-valle, Sharpe anualizado aproximado y matriz de correlación de P&L mensual por celda (variant,pair). Tests: `tests/test_portfolio_d.py` (15 passed).
+
+**Resultado (PF agregado OOS):**
+| Escenario | PF | n | maxDD%* | Sharpe | Net P&L |
+|---|---|---|---|---|---|
+| all (6×9=54 celdas) | 0.685 | 6622 | 945 | -0.99 | -9478 USDT |
+| top-10 celdas por PF (todas las monedas) | 1.063 | 1182 | 107 | 0.11 | +342 USDT |
+| top-10 celdas por PF, solo pares 4+ años (gate-compliant, sin XRP) | 0.963 | 1431 | 167 | -0.08 | +? |
+| Mejor celda aislada (ref B: EntryVolConfirm SOL) | 1.283 | 140 | — | — | — |
+
+(*) maxDD% = caída pico-a-valle de la curva de equity **corriente** (base pequeña ~cientos de USDT, no normalizada a capital). Caveat de medida: no es DD% sobre capital gestionado; sirve solo para comparar forma de curva entre escenarios, no en valor absoluto.
+
+**Hallazgo clave (lo importante de D):** el PF agregado del portfolio (**1.063** top-10 todas las monedas; **0.963** gate-compliant sin XRP) es **INFERIOR** a la mejor celda aislada (1.283). La matriz de correlación explica por qué:
+- Intra-par, las variantes trend están **0.95–0.99** correlacionadas (misma señal con filtros distintos).
+- SOL ↔ XRP (distinto par) ~0.2–0.3; el resto del universo correlaciona 0.58–0.80 (Fase A.1).
+- Conclusión: combinar trend correlacionado **NO** aporta diversificación real — solo diluye el PF de la mejor celda con las demás (todas <1.28). El régimen 2h spot es uno solo; no hay señales independientes que sumar.
+
+**Veredicto de Fase D:** el gate **PF ≥ 1.5 NO se alcanza** con spot trend 2h solo, por mucho que se agregue. El lever real es el **funding carry** (alpha estructural de perpetuos, casi market-neutral), que está **diferido a staging** (requiere credenciales, PROJECT.md §4). La pata de combinatoria/correlación de Fase D queda hecha y documentada; su conclusión es que **no basta**.
+
+**Siguiente:** Fase E (sizing/Kelly, maker-only) es irrelevante hasta tener edge OOS ≥1.5, y Fase F (reevaluar) dice: si ~1.3 → aceptar o archivar. Con spot trend ~1.0–1.3 agregado, la decisión honesta es **archivar el track spot trend** y abrir el track carry en staging. Se documenta en decision_log + STATUS; se pide OK de Héctor antes de cualquier credencial/staging (guardarraíles PROJECT.md: sin $ real sin gate, sin acciones en vivo sin OK).
+
+**Evidencia:** `results/portfolio_D.json` (consolidado), `results/portfolio_D_all.json` y `results/portfolio_D_top10.json` (matrices de correlación completas), `results/trades_B.json` (trade-level OOS).
+

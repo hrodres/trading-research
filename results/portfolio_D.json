@@ -1,0 +1,44 @@
+{
+  "method": "Agregacion OOS de trades de Fase B (2021-2025) con scripts/portfolio_d.py; sizing fijo 100 USDT/trade, sin compuesto (coherente con A/B/C). PF=sum(gross_profit)/sum(gross_loss). maxDD% = caida pico-a-valle de la curva de equity corriente (caveat: base peque\u00f1a ~cientos de USDT, no normalizada a capital).",
+  "gate_pf": 1.5,
+  "scenarios": {
+    "all_54_cells": {
+      "label": "all (6 variants x 9 pares)",
+      "n_trades": 6622,
+      "win_pct": 20.3,
+      "pf": 0.685,
+      "max_drawdown_pct": 945.15,
+      "sharpe_annualized": -0.996,
+      "net_pnl_usdt": -9478.45,
+      "n_strategies": 54
+    },
+    "top10_cells_all_pairs": {
+      "label": "top-10 celdas por PF (incluye XRP)",
+      "n_trades": 1182,
+      "win_pct": 24.6,
+      "pf": 1.063,
+      "max_drawdown_pct": 107.09,
+      "sharpe_annualized": 0.114,
+      "net_pnl_usdt": 342.63,
+      "n_strategies": 10
+    },
+    "top10_cells_long_history": {
+      "label": "top-10 celdas por PF, solo pares 4+ anos (sin XRP, gate-compliant)",
+      "n_trades": 1431,
+      "win_pct": 25.3,
+      "pf": 0.963,
+      "max_drawdown_pct": 167.2,
+      "sharpe_annualized": -0.079,
+      "net_pnl_usdt": -261.23,
+      "n_strategies": 10
+    }
+  },
+  "best_single_cell_reference_B": {
+    "EntryVolConfirm:SOL/USDT": {
+      "pf": 1.283,
+      "n": 140
+    }
+  },
+  "finding": "El PF agregado del portfolio (1.063 top-10 todas las monedas; 0.963 gate-compliant sin XRP) es INFERIOR a la mejor celda aislada (1.283). La correlacion intra-par de las variantes trend es 0.95-0.99; SOL<->XRP ~0.2-0.3. Combinar trend correlacionado NO aporta diversificacion real: solo diluye el PF de la mejor celda con las demas (<1.28). El gate PF>=1.5 NO se alcanza con spot trend 2h solo. El lever real (funding carry, alpha estructural de perpetuos) requiere credenciales y esta diferido a staging (PROJECT.md Fase D).",
+  "correlation_note": "Matrices completas en results/portfolio_D_all.json y portfolio_D_top10.json."
+}

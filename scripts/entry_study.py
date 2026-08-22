@@ -60,12 +60,39 @@ def run_year(year):
     return json.loads(z.read(main))
 
 
+def collect_raw_trades(year, data):
+    """Extrae trades crudos (timing + P&L) para el harness de Fase D.
+
+    Devuelve lista de dicts: {variant, pair, open_ts, close_ts, profit_abs}.
+    El harness de agregacion (scripts/portfolio_d.py) los usa para curvas de
+    equity, drawdown y matriz de correlacion SIN necesitar freqtrade.
+    """
+    out = []
+    strat = data.get("strategy", {})
+    for variant in VARIANTS:
+        for t in strat.get(variant, {}).get("trades", []):
+            prof = t.get("profit_abs")
+            pair = t.get("pair")
+            if prof is None or pair is None:
+                continue
+            out.append({
+                "variant": variant,
+                "pair": pair,
+                "open_ts": t.get("open_timestamp"),
+                "close_ts": t.get("close_timestamp"),
+                "profit_abs": float(prof),
+            })
+    return out
+
+
 def main():
     agg = defaultdict(lambda: defaultdict(lambda: {"gp": 0.0, "gl": 0.0, "n": 0,
                                                    "wins": 0, "by_year": defaultdict(lambda: {"gp": 0.0, "gl": 0.0, "n": 0})}))
+    raw_trades = []
 
     for year in YEARS:
         data = run_year(year)
+        raw_trades.extend(collect_raw_trades(year, data))
         strat = data["strategy"]
         for variant in VARIANTS:
             trades = strat.get(variant, {}).get("trades", [])
@@ -129,6 +156,9 @@ def main():
     os.makedirs("/opt/freqtrade/user_data/results", exist_ok=True)
     with open("/opt/freqtrade/user_data/results/entrystudy_B.json", "w") as fh:
         json.dump(out, fh, indent=2)
+    with open("/opt/freqtrade/user_data/results/trades_B.json", "w") as fh:
+        json.dump(raw_trades, fh, indent=2)
+    print(f"[export] {len(raw_trades)} trades crudos -> results/trades_B.json", flush=True)
 
     print("\n=== FASE B — PF agregado por VARIANT (todas las monedas, 2021-2025) ===")
     print(f"{'VARIANT':14} {'PF':>7} {'n':>5} {'win%':>6} {'best_pair':>10} {'PF_best':>8} {'#gate':>5}")
