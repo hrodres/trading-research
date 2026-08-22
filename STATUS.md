@@ -11,13 +11,14 @@
 - ✅ `STATUS.md` (checklist de fases) en GitHub.
 - ✅ `requirements.txt` (entorno reproducible para scripts/).
 - ✅ `CHANGELOG.md`.
-- ✅ CI (`.github/workflows/ci.yml`): py_compile + pytest + scan anti-secret en cada push/PR.
+- ✅ `strategies/baseline_trend.py` + `configs/backtest_baseline.json` (Fase A.2).
+- ⬜ CI (`.github/workflows/ci.yml`): **NO añadido** — el PAT no tiene scope `workflow`. Los gates (py_compile/pytest/scan) se corren en local antes de cada push.
 
 ## Fase A — Cimientos de medida (obligatoria)
 - ✅ **A.1 — Screening de pares** (correlación por fecha + liquidez USDT). Ejecutado 2026-08-22. Resultados en `decision_log.md`. Corr 0.58–0.80, BTC↔ETH 0.80, 0 redundantes. Caveats: XRP fuera del gate 4+ años; liquidez fina en DOT/LINK/AVAX/ADA.
-- ⬜ **A.2 — Estrategia baseline** (trend/momentum en freqtrade, la más simple posible).
-- ⬜ **A.3 — Walk-forward OOS por par** (fees + slippage, validation fuera de muestra). Aquí se decide el universo por datos (gate PF ≥ 1.5 OOS).
-- ✅ **A.4 — Documentar A.1** en `decision_log.md` + push.
+- ✅ **A.2 — Estrategia baseline** (`strategies/baseline_trend.py` + `configs/backtest_baseline.json`). Backtest corre = harness OOS validado. Resultado honesto: PF negativo (baseline de referencia, no edge). Detalles en `decision_log.md`.
+- ⬜ **A.3 — Walk-forward OOS por par** (fees + slippage + sizing acotado 1-2%, validation fuera de muestra). Aquí se decide el universo por datos (gate PF ≥ 1.5 OOS).
+- ✅ **A.4 — Documentación** en `decision_log.md` + `STATUS.md` + push.
 
 ## Fase B — Señal de entrada
 - ⬜ Regime detection + señales alternativas (breakout, pullback, volumen), validar en OOS.

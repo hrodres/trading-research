@@ -1,0 +1,41 @@
+{
+  "max_open_trades": 1,
+  "stake_currency": "USDT",
+  "stake_amount": "unlimited",
+  "tradable_balance_ratio": 1.0,
+  "fees": { "fee": 0.001 },
+  "timeframe": "2h",
+  "datadir": "data",
+  "strategy": "BaselineTrend",
+  "strategy_path": "/freqtrade/user_data/strategies",
+  "pairlists": [
+    {"method": "StaticPairList"}
+  ],
+  "exchange": {
+    "name": "coinbase",
+    "pair_whitelist": [
+      "BTC/USDT", "ETH/USDT", "SOL/USDT", "XRP/USDT", "ADA/USDT",
+      "DOGE/USDT", "DOT/USDT", "AVAX/USDT", "LINK/USDT"
+    ],
+    "pair_blacklist": []
+  },
+  "process_only_new_candles": true,
+  "use_exit_signal": true,
+  "exit_profit_only": false,
+  "entry_pricing": {
+    "price_side": "same",
+    "use_order_book": false,
+    "price_last_balance": 0.0
+  },
+  "exit_pricing": {
+    "price_side": "same",
+    "use_order_book": false,
+    "price_last_balance": 0.0
+  },
+  "order_types": {
+    "entry": "limit",
+    "exit": "limit",
+    "stoploss": "limit",
+    "stoploss_on_exchange": false
+  }
+}

@@ -46,3 +46,25 @@ Registro auditable de decisiones y su justificación. (Criterio del PROJECT.md: 
 
 **Siguiente:** A.2 (estrategia baseline trend/momentum) + A.3 (walk-forward OOS por par). La elección de universo de pares se hace tras A.3, no ahora.
 
+---
+
+## 2026-08-22 — Fase A.2: Estrategia baseline (harness OOS validado)
+
+**Decisión:** Crear `strategies/baseline_trend.py` (trend/momentum EMA20>EMA50, SL -10%, ROI 8/4/2%, sin leverage ni trailing) + `configs/backtest_baseline.json`. Objetivo: **validar el harness OOS**, no buscar edge.
+
+**Resultado del backtest** (timerange 2023-05-01→2026-01-08, 9 pares Coinbase 2h, fees 1.2% peor tier, `stake_amount: unlimited` → sizing 100% balance compuesto):
+- Trades: 356 · Win rate 52.0% (185/0/171)
+- Avg profit: **-1.76%** · Total P&L: **-99.89%** (1000→~1 USDT)
+- Drawdown: **99.89%** · Sharpe: **-3.66**
+- Mejor par XRP -3.06% · Peor par BTC -26.41%
+
+**Conclusión honesta:** la baseline es la línea base a superar; NO es edge (PF lejos de ≥1.5). Cumplió su propósito: **el harness OOS funciona** (backtest reproducible, fees+SL reales, salida en métricas).
+
+**Dos aprendizajes reales del resultado:**
+1. **TP asimétrico vs SL destruye PF.** ROI capa el gain en +8% pero SL = -10% + fees ~2.4%. Con 52% win rate la esperanza por trade es negativa. Esto es exactamente lo que la **Fase C (exits)** debe arreglar.
+2. **El DD 99.89% es artefacto del sizing.** `stake_amount: unlimited` opera el 100% del balance por trade y compone. Eso NO representa el riesgo real del proyecto (1–2% por trade, según PROJECT.md). Para **A.3** se usará sizing acotado (el que cuenta para el gate PF≥1.5).
+
+**Bloqueos técnicos resueltos (freqtrade 2026.7):** `--datadir` debe apuntar a `data/coinbase/` (donde están los `.feather` como `<PAIR>-2h.feather`); el config exige bloques `pairlists`, `entry_pricing`, `exit_pricing`, `order_types`. Anotado para reutilizar en A.3.
+
+**Siguiente:** A.3 (walk-forward OOS por par con sizing 1-2% y validation fuera de muestra; aquí se decide el universo por datos, gate PF ≥ 1.5 OOS).
+

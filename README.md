@@ -31,7 +31,10 @@ Proyecto de I&D de trading cuantitativo en crypto: usa **freqtrade** como andami
 trading-research/
 ├── scripts/
 │   └── screening.py          # Fase A.1: correlación + liquidez por par (Coinbase 2h)
-├── strategies/               # estrategias freqtrade (Fase A.2+); .gitkeep por ahora
+├── strategies/
+│   └── baseline_trend.py     # Fase A.2: estrategia baseline tendencia/momentum
+├── configs/
+│   └── backtest_baseline.json  # config freqtrade para backtest (Fase A.2)
 ├── tests/
 │   └── test_repo_integrity.py  # CI local: estructura, compilación, sin secretos
 ├── PROJECT.md                # propósito, fases, guardarraíles
@@ -43,7 +46,7 @@ trading-research/
 ├── LICENSE                   # MIT
 └── README.md
 ```
-> **Datos NO versionados:** los klines Coinbase 2h viven en el volumen del contenedor freqtrade (`/docker/freqtrade/user_data/data/`), no en el repo (ver `.gitignore`).
+> **Datos NO versionados:** los klines Coinbase 2h viven en el volumen del contenedor freqtrade (`/docker/freqtrade/user_data/data/coinbase/`), no en el repo (ver `.gitignore`).
 
 ## Principios
 - Sin apalancamiento para inflar el PF.
