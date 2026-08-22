@@ -47,7 +47,8 @@ trading-research/
 ├── results/
 │   ├── walkforward_A3.json   # resultado A.3 (PF por par 2021-2025)
 │   ├── exitstudy_C.json      # resultado C (PF por variant/par 2021-2025)
-│   └── entrystudy_B.json     # resultado B (PF por variant/par 2021-2025)
+│   ├── entrystudy_B.json     # resultado B (PF por variant/par 2021-2025)
+│   └── entrystudy_v9style.json  # ANEXO FORENSE aislado (NO canónico) — EntryV9Style, casi inerte (PF 0.0, 5 trades/5a)
 ├── tests/
 │   └── test_repo_integrity.py  # CI local: estructura, compilación, sin secretos
 ├── PROJECT.md                # propósito, fases, guardarraíles
