@@ -117,7 +117,7 @@ El proyecto puede ser un sistema que se adapte y autogestione, **pero la adaptac
 **SÍ hace (seguro):**
 - Orquestador de investigación periódico (semanal/mensual): re-corre walk-forward, comprueba gate de PF por estrategia, retira las muertas, ajusta asignación por rendimiento *validado*, reacciona al régimen.
 - Auto-gestión de riesgo: capa que baja exposición si el drawdown se acerca al límite.
-- Cambios auditables: cada ajuste → `decision_log.md` + `CHANGELOG.md` (memoria de qué funcionó).
+- Cambios auditables: cada ajuste → `decision_log.md` (memoria de qué funcionó).
 
 **NO hace (riesgo):**
 - Mutar parámetros persiguiendo el retorno reciente (overfit a ruido → blow-up).
@@ -129,31 +129,7 @@ El proyecto puede ser un sistema que se adapte y autogestione, **pero la adaptac
 
 ---
 
-## 9 Estructura del repositorio
-
-```
-trading-research/
-├── scripts/            # análisis de datos y utilidades (screening, descarga)
-│   └── screening.py    # Fase A.1: correlación + liquidez por par (Coinbase 2h)
-├── strategies/         # estrategias freqtrade (Fase A.2+)
-├── tests/              # tests unitarios (close engine, harness OOS)
-├── data/               # NO versionado: klines se descargan a demanda (.gitignore)
-├── PROJECT.md          # esta definición
-├── decision_log.md     # log auditable de decisiones
-├── README.md           # resumen + estructura
-├── LICENSE             # MIT
-└── .gitignore          # excluye secrets, datos y estado runtime
-```
-
-**Cómo correr `scripts/screening.py`:** el script asume los datos de freqtrade en
-`/opt/freqtrade/user_data/data/coinbase/<PAR>-2h.feather` (ruta de CT 113 nativo). Desde el host:
-```bash
-scp scripts/screening.py openclaw@192.168.1.222:/tmp/screening.py
-ssh openclaw@192.168.1.222 "sudo pct push 113 /tmp/screening.py /opt/freqtrade/user_data/screening.py"
-ssh openclaw@192.168.1.222 "sudo pct exec 113 -- bash -c 'cd /opt/freqtrade && /opt/ft/bin/python /opt/freqtrade/user_data/screening.py'"
-```
-
-
+## 9 Notas de contexto (legacy v9)
 - El backtester del repo v9 estaba **roto** (etiquetaba stop-loss como trailing), dando números falsos.
 - Con lógica corregida, el portfolio v9 da **PF ~1.2** (363 trades, fees reales) — un edge **frontera** que **no compensa el riesgo** del perfil 2x (~28% de capital por SL).
 - Un experto real saca PF 1.5-2.0 vía: múltiples estrategias no correlacionadas, mejor señal, sizing estricto y ejecución barata.

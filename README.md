@@ -1,82 +1,34 @@
 # trading-research
 
-![License](https://img.shields.io/badge/License-MIT-yellow.svg)
-![Python](https://img.shields.io/badge/python-3.12%2B-blue)
-![Status](https://img.shields.io/badge/status-research-yellow)
-![Exchange](https://img.shields.io/badge/exchange-Coinbase-blue)
-![Engine](https://img.shields.io/badge/engine-freqtrade-orange)
+Búsqueda de **edge experto/pro** en crypto (Profit Factor ≥ 1.5 OOS). Proyecto de I&D
+cuantitativo: usa **freqtrade** como andamiaje (backtest OOS) y construye la capa de valor propia.
 
-Búsqueda de **edge experto/pro** en crypto (Profit Factor ≥ 1.5 sostenido out-of-sample).
+## Estado (resumen)
+- **Infra:** freqtrade NATIVO en CT 113 (`freqtrade-native`, Debian 13, Proxmox). Ver `SETUP.md`.
+- **Datos:** 9 pares Coinbase 2h (2020→2026), **sin credenciales**.
+- **Fases:** A ✅ · B ✅ · C ✅ · D (combinatoria + carry en seco) ✅ / carry staging ⬜ · E ⬜ · F ⬜.
+- **Veredicto honesto:** ninguna señal direccional (long) alcanza PF≥1.5 (techo ~1.3). El funding carry lo rompe en backtest en seco (PF 3.4) pero es mecanismo de funding, no señal direccional, y no está validado en vivo. Por el criterio del usuario (edge direccional validado), el proyecto no tiene viabilidad demostrada. Ver `STATUS.md` y `decision_log.md`.
 
-Proyecto de I&D de trading cuantitativo en crypto: usa **freqtrade** como andamiaje (backtest OOS, hyperopt) y construye la capa de valor propia — señales (edge), orquestador adaptativo y aprendizaje por acción/omisión.
+## Documentación (números vivos en `results/*.json`)
+- `PROJECT.md` — propósito, criterios de éxito, guardarraíles.
+- `STATUS.md` — checklist de fases (done / pending).
+- `decision_log.md` — registro cronológico de decisiones y veredictos (apunta a los JSON).
+- `SETUP.md` — instalación freqtrade nativo + cómo correr backtests.
 
-## Estado
-- Infra: **freqtrade NATIVO** en CT 113 (`freqtrade-native`, Debian 13, Proxmox 192.168.1.222) — ver `SETUP.md`.
-- Datos: 9 pares candidatos Coinbase 2h (2020→2026), **sin credenciales**.
-- Edge actual spot 2h: **~PF 1.0–1.3 agregado** (Fase D combinatoria). **GATE PF≥1.5 NO ALCANZADO** con solo spot trend 2h.
-- **Funding carry (Fase D, en SECO 2026-08-22, sin credenciales):** PF agregado **3.447** con datos públicos Binance perp 2021-2025. El carry rompe el techo PF≥1.5 — pero correlación con trend **+0.43/+0.55** (NO diversifica; concentra riesgo de régimen). 2022 (bajista) cae a PF 0.51. Pendiente: validar en staging (requiere credenciales + OK Héctor).
-- Fases: A ✅ · B ✅ · C ✅ · D (combinatoria + carry en seco) ✅ / carry staging ⬜ · E ⬜ · F ⬜.
-
-## Cómo funciona
-1. **Fase A** — Medir bien (walk-forward OOS, fees + slippage).
-2. **Fase B-D** — Señal de entrada, salida, y diversificación (trend + mean-reversion + funding carry).
-3. **Fase F** — Reevaluar. Solo si OOS ≥ 1.5 → staging real (mínimo).
-
-## Documentación
-- `PROJECT.md` — propósito, criterios de éxito, guardarraíles, fases.
-- `STATUS.md` — **checklist de fases** (qué está done / in-progress / pending).
-- `decision_log.md` — decisiones y su justificación (auditable).
-- `CHANGELOG.md` — registro de cambios del repositorio.
-
-## Estructura del repo
+## Estructura
 ```
 trading-research/
-├── scripts/
-│   ├── screening.py          # Fase A.1: correlación + liquidez por par (Coinbase 2h)
-│   ├── walkforward.py         # Fase A.3: walk-forward OOS por par (freqtrade harness)
-│   ├── exit_study.py          # Fase C: estudio de exits (4 variants, --strategy-list)
-│   ├── entry_study.py         # Fase B: estudio de entradas (6 variants, --strategy-list)
-│   ├── portfolio_d.py         # Fase D: agregación de portfolio OOS (stdlib, sin freqtrade)
-│   ├── carry_backtest.py      # Fase D (carry): funding carry en SECO (Binance perp público, sin creds)
-│   └── inspect_export.py      # util: inspecciona estructura del export de freqtrade 2026.7
-├── strategies/
-│   ├── baseline_trend.py     # Fase A.2: estrategia baseline tendencia/momentum
-│   ├── exit_study.py         # Fase C: 4 variants de exit (misma entrada)
-│   └── entry_study.py        # Fase B: 6 variants de entrada (mismo exit)
-├── configs/
-│   ├── backtest_baseline.json    # config backtest A.2
-│   ├── backtest_walkforward.json # config walk-forward A.3 (sizing 100 USDT)
-│   ├── backtest_exitstudy.json   # config Fase C (exit study)
-│   └── backtest_entrystudy.json  # config Fase B (entry study)
-├── results/
-│   ├── walkforward_A3.json   # resultado A.3 (PF por par 2021-2025)
-│   ├── exitstudy_C.json      # resultado C (PF por variant/par 2021-2025)
-│   ├── entrystudy_B.json     # resultado B (PF por variant/par 2021-2025)
-│   ├── trades_B.json         # RAW OOS: trades crudos 2021-2025 (6622) p/ agregación D [derivado; regenerable]
-│   ├── portfolio_D.json      # resultado D (consolidado combinatoria: escenarios + veredicto)
-│   ├── portfolio_D_all.json  # D: matriz de correlación completa (54 celdas)
-│   ├── carry_D_taker.json    # D carry: PF por par/año + correlación vs trend (fee taker 0.1%)
-│   ├── carry_D_maker.json    # D carry: idem (fee maker 0.02%)
-│   └── entrystudy_v9style.json  # ANEXO FORENSE aislado (NO canónico) — EntryV9Style, casi inerte (PF 0.0, 5 trades/5a)
-├── tests/
-│   └── test_repo_integrity.py  # CI local: estructura, compilación, sin secretos
-├── PROJECT.md                # propósito, fases, guardarraíles
-├── STATUS.md                 # checklist de fases (done / in-progress / pending)
-├── SETUP.md                  # instalación freqtrade NATIVO (CT 113, sin Docker) + cómo correr backtests
-├── decision_log.md           # log auditable de decisiones
-├── CHANGELOG.md              # registro de cambios del repositorio
-├── requirements.txt          # freqtrade==2026.7 + pyarrow + pandas/numpy/pytest
-├── .gitignore                # excluye secrets, datos y estado runtime
-├── LICENSE                   # MIT
-└── README.md
+├── scripts/      # screening, walkforward, exit/entry_study, portfolio_d, carry_backtest
+├── strategies/   # freqtrade: baseline_trend, exit_study, entry_study
+├── configs/      # backtest_*.json (A.2/A.3/C/B)
+├── results/      # salida de backtests (JSON, evidencia)
+├── tests/        # test_repo_integrity, test_portfolio_d, test_carry_backtest
+├── PROJECT.md · STATUS.md · decision_log.md · SETUP.md · README.md
+├── requirements.txt · .gitignore · LICENSE (MIT)
 ```
-> **Datos NO versionados:** los klines Coinbase 2h viven en `/opt/freqtrade/user_data/data/coinbase/` dentro de **CT 113** (freqtrade nativo, sin Docker), no en el repo (ver `.gitignore` y `SETUP.md`).
+> **Datos NO versionados:** klines Coinbase 2h en `/opt/freqtrade/user_data/data/coinbase/` (CT 113). El raw `results/trades_B.json` y `results/funding_raw.json` son regenerables y están en `.gitignore`.
 
 ## Principios
-- Sin apalancamiento para inflar el PF.
-- Sin overfit (OOS obligatorio).
-- Sin dinero real hasta el gate de staging.
-- **GitHub es la fuente de verdad** (canónica). Las copias en local/contenedores son artefactos de despliegue; si discrepan, manda GitHub. Verificar contra la API tras cada push.
-- **Estructura disciplinada:** `scripts/` (análisis), `strategies/` (freqtrade), `tests/` (unitarios). Al mover/cambiar código, actualizar `PROJECT.md` + `README.md`.
-
-> Repo público. Datos de mercado públicos, sin credenciales.
+- Sin apalancamiento para inflar PF · Sin overfit (OOS obligatorio) · Sin $ real hasta gate de staging.
+- **GitHub = fuente de verdad** (canónica). Si discrepa con copias locales/contenedores, manda GitHub.
+- Repo público; datos de mercado públicos, sin credenciales.
