@@ -24,6 +24,20 @@ Proyecto de I&D de trading cuantitativo en crypto: usa **freqtrade** como andami
 - `PROJECT.md` — propósito, criterios de éxito, guardarraíles, fases.
 - `decision_log.md` — decisiones y su justificación (auditable).
 
+## Estructura del repo
+```
+trading-research/
+├── scripts/            # análisis de datos y utilidades (screening, descarga)
+│   └── screening.py    # Fase A.1: correlación + liquidez por par (Coinbase 2h)
+├── strategies/         # estrategias freqtrade (Fase A.2+), aún vacío
+├── tests/              # tests unitarios (close engine, etc.)
+├── data/               # NO versionado: klines se descargan a demanda
+├── PROJECT.md          # definición y fases
+├── decision_log.md     # log de decisiones
+├── LICENSE             # MIT
+└── README.md
+```
+
 ## Principios
 - Sin apalancamiento para inflar el PF.
 - Sin overfit (OOS obligatorio).

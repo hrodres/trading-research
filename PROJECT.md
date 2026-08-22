@@ -124,6 +124,34 @@ El proyecto puede ser un sistema que se adapte y autogestione, **pero la adaptac
 
 > Esto es la versión limpia del mutator de v9: adaptación acotada y validada, no libre.
 
+---
+
+## 9 Estructura del repositorio
+
+```
+trading-research/
+├── scripts/            # análisis de datos y utilidades (screening, descarga)
+│   └── screening.py    # Fase A.1: correlación + liquidez por par (Coinbase 2h)
+├── strategies/         # estrategias freqtrade (Fase A.2+)
+├── tests/              # tests unitarios (close engine, harness OOS)
+├── data/               # NO versionado: klines se descargan a demanda (.gitignore)
+├── PROJECT.md          # esta definición
+├── decision_log.md     # log auditable de decisiones
+├── README.md           # resumen + estructura
+├── LICENSE             # MIT
+└── .gitignore          # excluye secrets, datos y estado runtime
+```
+
+**Cómo correr `scripts/screening.py`:** el script asume los datos de freqtrade en
+`/freqtrade/user_data/data/coinbase/<PAR>-2h.feather` (ruta del contenedor). Desde el host:
+```bash
+scp scripts/screening.py openclaw@192.168.1.222:/tmp/screening.py
+ssh openclaw@192.168.1.222 "sudo pct push 112 /tmp/screening.py /docker/freqtrade/user_data/screening.py"
+ssh openclaw@192.168.1.222 "sudo pct exec 112 -- docker run --rm --entrypoint python3 \
+  -v /docker/freqtrade/user_data:/freqtrade/user_data -w /freqtrade/user_data \
+  freqtradeorg/freqtrade:stable /freqtrade/user_data/screening.py"
+```
+
 
 - El backtester del repo v9 estaba **roto** (etiquetaba stop-loss como trailing), dando números falsos.
 - Con lógica corregida, el portfolio v9 da **PF ~1.2** (363 trades, fees reales) — un edge **frontera** que **no compensa el riesgo** del perfil 2x (~28% de capital por SL).
