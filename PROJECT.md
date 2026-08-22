@@ -4,18 +4,25 @@ Búsqueda de **edge sistemático en crypto** con **Profit Factor (PF) ≥ 1.5** 
 out-of-sample (OOS), neto de fees + slippage + compuesto, con drawdown acotado.
 
 ## Propósito
-Desarrollar un portfolio de estrategias sistemáticas (spot + perpetuos) con edge real
-y robusto, no un artefacto de overfit. No es "máximo beneficio en el menor tiempo".
+El entregable NO es "una estrategia long con PF≥1.5". Es un **sistema de señales /
+meta-controlador** que decide qué hacer en cada momento: mantiene un **pool de
+estrategias candidatas** y selecciona la mejor según el régimen de mercado (regime /
+online selection), con **walk-forward estricto** (la decisión en `t` usa solo datos
+≤ `t`; el PF se mide en datos `> t`). El backtesting con freqtrade es el harness de
+validación, no el producto.
 
 ## Criterios de éxito
 | Métrica | ÉXITO | EXCELENCIA |
 |---|---|---|
-| PF agregado OOS (walk-forward 2-3a, neto fees+slip+compuesto) | ≥ 1.5 | ≥ 2.0 |
+| PF del PROCESO de selección OOS (walk-forward 2-3a, neto fees+slip+compuesto) | ≥ 1.5 | ≥ 2.0 |
 | Max drawdown (backtest) | ≤ 20% | ≤ 12% |
 | Sharpe anualizado | ≥ 1.0 | ≥ 1.5 |
 
-Solo si se cumple ÉXITO en OOS → staging con capital mínimo. Por encima de 2.0 suele
-ser overfit o cola de riesgo escondida; el target 1.5 es ambicioso pero honesto.
+El gate se aplica al **proceso de selección completo** (selector), NO al PF suelto de
+cada candidata: comparar PF individuales y quedarse con la mayor = selection bias /
+look-ahead. Solo si el selector cumple ÉXITO en OOS → staging con capital mínimo.
+Por encima de 2.0 suele ser overfit o cola de riesgo escondida; 1.5 es ambicioso
+pero honesto.
 
 ## Guardarraíles (no negociables)
 - ❌ Sin apalancamiento para inflar el PF.

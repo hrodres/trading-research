@@ -8,6 +8,13 @@ Registro cronológico de decisiones y resultados. **Los números vivos están en
 - Datos públicos Coinbase spot 2h, 9 pares candidatos, sin credenciales.
 - Repo GitHub público.
 
+## Cambio de alcance (2026-08-22) — El proyecto ES un sistema de señales
+- CRÍTICA del usuario: el objetivo NO es "encontrar 1 estrategia long con PF≥1.5 OOS". Es un **meta-controlador** que decide la mejor estrategia en cada momento (regime/online selection).
+- Sesgo señalado: backtestear N candidatas y quedarse con la de mayor PF = **selection bias / look-ahead**. Fix: selector con **walk-forward estricto** — la decisión en `t` usa solo datos `≤ t`; el PF se mide en datos `> t`.
+- Las 4 candidatas long (rotation/volbreakout/atr_sl/partialtp) = **pool del selector**, no el producto final.
+- Aclaración del usuario (06:00): freqtrade sigue siendo el harness (decisión de inicio, vigente); la crítica NO va contra freqtrade/backtesting, sino contra CÓMO se valida la selección.
+- Criterio de éxito real: **el selector logra PF≥1.5 OOS con selección walk-forward honesta**. Rama: `feat/long-candidates`.
+
 ## Fase A.1 — Screening
 - Correlación log-returns 0.58–0.80; 0 pares con corr ≥0.80 (margen para diversificar). Liquidez BTC $1.68M → DOT $8.5K/2h. XRP arranca 2023-07 (fuera del gate 4+ años).
 
