@@ -22,6 +22,12 @@
 ## Fase C — Salida
 - ✅ **C** 4 variants sobre misma entrada. **0 variants/par pasan gate** (mejor PF 0.65 ExitEmaCross; mejor par SOL 0.98). El TP fijo corto era el asesino nº1. `results/exitstudy_C.json`.
 
+## Fase B.2 — Pool del selector (long-candidates)
+- ✅ 4 candidatas long sobre 9 pares Coinbase 2h, 5 ventanas 2021–2025/26 (20 backtests, fees 1.2% worst-case): `AtrSlLong`, `PartialtpLong`, `RotationLong`, `VolBreakoutLong`.
+- ✅ **Ninguna pasa gate PF≥1.5 OOS**. Mejor `VolBreakoutLong`: mediana PF 1.45 (2021: 2.36, 2023: 1.53, 2024: 1.45; 2022: 0.46, 2025-26: 0.60 → 3/5 ventanas PF>1). `RotationLong` mediana 1.01; `AtrSlLong` y `PartialtpLong` 0/5 ventanas.
+- ⚠️ **Patrón de régimen**: TODAS pierden en 2022 y 2025-26 (bear/range) y ganan en 2021/2023/2024 (bull). Edge = régimen alcista, no alpha independiente. Confirmado: 0 candidatas avanzan.
+- ✅ `results/longcandidates_summary.csv` + `scripts/analyze_longcandidates.py`.
+
 ## Fase D — Diversificación
 - ✅ **D combinatoria**: PF agregado top-10 = **1.063** (todas las monedas) / **0.963** (gate-compliant sin XRP) — INFERIOR a la mejor celda (1.283). Correlación intra-par 0.95–0.99 → no diversifica. `results/portfolio_D.json`.
 - ✅ **D carry (en SECO, sin credenciales)**: funding carry long spot + short perp 1:1, Binance perp 2021–2025 → PF agregado **3.447** (rompe gate). Pero correlación vs trend +0.43/+0.55 (NO diversifica; concentra riesgo de régimen). 2022 cae a PF 0.51. `results/carry_D.json`.

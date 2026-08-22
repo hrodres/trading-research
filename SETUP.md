@@ -47,3 +47,11 @@ cd /opt/freqtrade
 - Config EXIGE: `pairlists:[{StaticPairList}]`, `entry_pricing`, `exit_pricing`, `order_types`.
 - Export trades → zip auto-nombrado en `backtest_results/`; leer con `.last_result.json` + `latest_backtest`.
 - `--strategy-list A B C` evalúa varias estrategias en UNA pasada.
+
+## Lecciones aprendidas (no repetir errores)
+- **`--strategy` recibe el NOMBRE DE LA CLASE**, no el del archivo. `atr_sl_long.py` → clase `AtrSlLong`. Pasar `atr_sl_long` da `Impossible to load Strategy ... class does not exist or contains Python code errors`. El nombre de clase debe ser el CamelCase exacto del archivo (`partialtp_long.py` → `PartialtpLong`, NO `PartialTpLong`).
+- **El error "contains Python code errors" es engañoso**: casi siempre es nombre de clase incorrecto, no un error de sintaxis. `py_compile` NO lo detecta (solo compila). Verificar con un smoke test real (1 estrategia + timerange válido + leer el log) o cargando el módulo con `importlib` dentro del CT.
+- **Lanzar jobs largos en CT 113**: `pct exec 113 -- nohup ... &` y `setsid ... &` MUEREN al salir el exec (el CT mata el grupo de procesos). CT 113 corre **systemd (PID 1)** → usar `systemd-run --unit=nombre /bin/bash script.sh` (sobrevive al exec; verificar con `systemctl is-active nombre.service`).
+- **Transferir archivos al CT**: `cat f | ssh pct exec 'cat > dest'` corrompe el contenido. Usar `base64 f | ssh pct exec 'base64 -d > dest'`.
+- **Smoke test antes de lanzar en masa**: 1 estrategia + timerange con datos (BTC/ETH empiezan 2021-05-04, no 2021-01-01; un rango como `20210101-20210201` da `No data found`). Confirmar `EXIT=0` y trades > 0 antes de lanzar las N.
+- **No declarar "en marcha" sin verificar desde una conexión nueva**: `systemctl is-active` + `pgrep -c freqtrade` + conteo de zips/JSON. En la espiral de esta sesión, una sola causa raíz (nombre de clase) explicó los 20 fallos iniciales.

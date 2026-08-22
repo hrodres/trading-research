@@ -39,3 +39,4 @@ Thumbs.db
 results/trades_B.json
 # ─── Fase D (carry): raw funding data (regenerable via scripts/carry_backtest.py --fetch) ──
 results/funding_raw.json
+results/longcandidates/
