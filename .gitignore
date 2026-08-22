@@ -35,5 +35,7 @@ venv/
 .DS_Store
 Thumbs.db
 
+# ─── Fase D: raw trades OOS (regenerable desde zips freqtrade CT 113) ──
+results/trades_B.json
 # ─── Fase D (carry): raw funding data (regenerable via scripts/carry_backtest.py --fetch) ──
 results/funding_raw.json
