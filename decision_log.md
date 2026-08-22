@@ -120,3 +120,40 @@ Registro auditable de decisiones y su justificación. (Criterio del PROJECT.md: 
 
 **Siguiente:** Fase B (regime detection + breakout/pullback/volumen, validado OOS).
 
+---
+
+## 2026-08-22 — Fase B: estudio de señales de ENTRADA (COMPLETADA)
+
+**Objetivo:** aislar el efecto de la ENTRADA. Todas las variants comparten el MISMO exit ganador de Fase C (ExitEmaCross: dejar correr hasta EMA-cross + SL -10%, sin TP fijo corto). Lo único que cambia es la condición de entrada. Reusa el patrón de C (`--strategy-list` en una pasada por año).
+
+**Variants (`strategies/entry_study.py`):**
+- `EntryTrend` : EMA20>EMA50 (referencia de A.3/C).
+- `EntryTrendADX` : EMA20>EMA50 + ADX>25 (filtra chop).
+- `EntryBreakout` : ruptura máximo 20v (Donchian).
+- `EntryPullback` : EMA20>EMA50 + pullback a EMA20 + RSI gira up.
+- `EntryVolConfirm`: EMA20>EMA50 + volumen > 1.5x media.
+- `EntryMeanRev` : RSI<30 en rango (contrarian, contraste).
+
+**Método:** walk-forward OOS por año 2021-2025, 9 pares, sizing fijo 100 USDT, fees 1.2‰, sin fitting en IS → todo OOS por construcción. Ejecutado en CT 113 (freqtrade nativo 2026.7). Orquestador `scripts/entry_study.py`, config `configs/backtest_entrystudy.json`, evidencia `results/entrystudy_B.json`.
+
+**Resultado (PF agregado 2021-2025, todas las monedas):**
+| Variant | PF | n | win% | Mejor par (PF) |
+|---|---|---|---|---|
+| EntryTrendADX | **0.756** | 1018 | 23.1 | SOL 1.142 |
+| EntryBreakout | 0.742 | 1109 | 22.7 | SOL 1.158 |
+| EntryVolConfirm | 0.731 | 1294 | 20.6 | SOL **1.283** |
+| EntryTrend | 0.65 | 1581 | 19.7 | SOL 0.979 |
+| EntryPullback | 0.611 | 1501 | 17.8 | SOL 1.041 |
+| EntryMeanRev | 0.066 | 119 | 7.6 | LINK 0.648 |
+
+**Pares que pasan el gate (PF≥1.5, n≥30, 4+yr): NINGUNO.** Mejor celda individual: EntryVolConfirm SOL/USDT PF 1.283 (n=140, win 30%) — se queda justo por debajo de 1.5.
+
+**Conclusiones honestas (lo importante de B):**
+1. **Los filtros de entrada SÍ ayudan** vs la EMA plana: TrendADX/Breakout/VolConfirm suben el PF de 0.65 → 0.73–0.76. Pero no bastan para el gate.
+2. **Techo de trend-following 2h spot ~1.3.** Incluso la mejor entrada+exit en SOL se techa en ~1.28. El bottleneck ya no es solo la entrada: es sistémico al régimen 2h spot.
+3. **SOL/USDT es sistemáticamente el mejor par** en todas las entradas (PF 0.98–1.28). BTC el peor (0.49–0.54).
+4. **EntryMeanRev (contrarian) es desastroso (PF 0.066)** → confirma que el régimen es trend-following, no mean-reversion. Descartar contrarian en 2h spot.
+5. **El salto a PF≥1.5 no vendrá de una señal sola** → requiere **Fase D (diversificación/agregación de portfolio)**: combinar varias entradas/pares no correlacionadas para que el PF de portfolio suba por diversificación (y control de DD).
+
+**Siguiente:** Fase D (diversificación + funding carry, requiere credenciales, más tarde). Posible extensión: añadir `EntryV9Style` (estilo de entrada del bot v9) como 7ª variant si se quiere comparar, pero su PF agregado ya se conoce (~1.2) y no compensa riesgo.
+
