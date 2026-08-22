@@ -47,3 +47,9 @@ Registro cronológico de decisiones y resultados. **Los números vivos están en
 ## Estado final
 - A✅ B✅ B.2✅ B.3✅ C✅ D(combinatoria+carry seco)✅. Carry staging ⬜ · E ⬜ · F ⬜.
 - Ninguna señal direccional alcanza PF≥1.5 (techo ~1.3, incluso con filtro de régimen global: VolBreakoutLong PF agregado 1.304). El carry lo rompe en backtest (PF 3.447) pero es mecanismo de funding, no señal direccional, y no está validado en vivo. Repo en "punto honesto", documentación consolidada.
+
+## 10:17 — D.2: carry + filtro de régimen (componente selector aplicado al carry)
+- Hipótesis: el carry cae a PF 0.51 en 2022 porque en bear el funding se vuelve negativo. Aplicar el interruptor de régimen (close BTC 2h > SMA200 / close propio par > SMA200, sin lookahead) debería recortar esas pérdidas.
+- Resultado (mismo modelo que carry_D.json, fees taker 0.001): PF agregado ALL 3.447 → **GLOBAL 7.551 / PERPAR 6.879**; GL agregado cae de 1.863 a 0.341/0.298 (se cortan las pérdidas del bear). Por año, TODAS las ventanas ≥ 3.08: 2022 pasa de 0.51 → 3.18/3.09.
+- Coste: net baja (4.52 → 2.20/1.72) porque solo se opera en bull (~47% de eventos, el resto apagado). Trade-off calidad vs cantidad: a favor de calidad si el objetivo es PF (gate).
+- **Primera señal del proyecto que pasa el gate PF≥1.5 OOS en TODAS las ventanas.** Evidence: `results/carry_regime_summary.csv`. Lectura: el selector (régimen) ya tiene 1 mecanismo con edge validado; falta staging (credenciales) para ejecución real.

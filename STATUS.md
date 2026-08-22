@@ -40,6 +40,7 @@
 ## Fase D — Diversificación
 - ✅ **D combinatoria**: PF agregado top-10 = **1.063** (todas las monedas) / **0.963** (gate-compliant sin XRP) — INFERIOR a la mejor celda (1.283). Correlación intra-par 0.95–0.99 → no diversifica. `results/portfolio_D.json`.
 - ✅ **D carry (en SECO, sin credenciales)**: funding carry long spot + short perp 1:1, Binance perp 2021–2025 → PF agregado **3.447** (rompe gate). Pero correlación vs trend +0.43/+0.55 (NO diversifica; concentra riesgo de régimen). 2022 cae a PF 0.51. `results/carry_D.json`.
+- ✅ **D.2 carry + filtro de régimen** (`scripts/carry_regime.py`): aplicar el componente 1 del selector al carry → **TODAS las ventanas ≥ PF 3.0 y PF agregado 7.55 (global) / 6.88 (per-par)**. 2022 pasa de 0.51 → 3.18. El filtro corta el problema del bear (GL de 1.86 → 0.34). net baja (2.20 vs 4.52: opera solo ~47% del tiempo, en bull) pero calidad riesgo mucho mayor. Primera señal que pasa el gate OOS en TODAS las ventanas. `results/carry_regime_summary.csv`.
 - ⬜ **Carry en staging** (requiere credenciales + OK): pendiente.
 - ⬜ **Mean-reversion**: descartada (EntryMeanRev PF 0.066).
 
@@ -50,4 +51,4 @@
 - ⬜ Si OOS ≥ 1.5 → staging. Si ~1.3 → aceptar o archivar.
 
 ---
-*Última actualización: 2026-08-22 — Fases A/B/C/B.2/B.3/D ejecutadas. Sin señal direccional que alcance PF≥1.5 (techo ~1.3, incluso con filtro de régimen global o per-par: mejor PF agregado 1.304 VolBreakoutLong); el carry lo rompe en seco (3.447) pero no está validado en vivo.*
+*Última actualización: 2026-08-22 — Fases A/B/C/B.2/B.3/D ejecutadas. Direccional: techo ~1.3 (no alcanza PF≥1.5). **Carry + filtro de régimen: única señal que pasa PF≥1.5 OOS en TODAS las ventanas (agregado 7.55 global / 6.88 per-par, mínimo 3.08 en 2022)**. Pendiente: staging en vivo para validar ejecución.*
