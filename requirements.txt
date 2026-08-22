@@ -1,10 +1,9 @@
 # trading-research — dependencias
 #
-# Fase de ejecución de backtests: FREQTRADE NATIVO (sin Docker) en CT 113
-# (Debian 13, venv en /opt/ft). Instalado con:
+# Fase de ejecución de backtests: FREQTRADE NATIVO (venv /opt/ft). Instalado con:
 #   apt-get install -y python3-venv libta-lib-dev
 #   python3 -m venv /opt/ft && /opt/ft/bin/pip install -r requirements.txt
-# Versiones fijadas por freqtrade 2026.7 (verificado: freqtrade 2026.7, ccxt 4.5.75,
+# Versiones fijadas por freqtrade 2026.7 (freqtrade 2026.7, ccxt 4.5.75,
 # Python 3.13.5, TA-Lib 0.7.1). freqtrade arrastra pandas/numpy/pyarrow/ccxt.
 freqtrade==2026.7
 pyarrow>=14.0   # lectura de klines .feather

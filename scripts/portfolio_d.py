@@ -20,14 +20,14 @@ Diseno honesto (leer antes de usar):
   exposicion media). Documentado como aproximacion.
 - Matriz de correlacion: por estrategia, serie mensual de P&L neto; Pearson por pares
   (drop de meses sin datos en ambas). Mide si realmente diversificamos o duplicamos
-  la misma senal (leccion v9: BTC/ETH/SOL/LINK bailan igual).
+  la misma senal.
 
 NO requiere freqtrade ni numpy: solo stdlib. Corre en cualquier host para validar
-la agregacion antes/depués de generar los trades en CT 113.
+la agregacion antes/depués de generar los trades.
 
 Uso:
   python3 scripts/portfolio_d.py --trades results/trades_B.json \
-      --include EntryVolConfirm:ENTRYV9STYLE-NO ...  (o --auto para top-N por PF)
+      --include EntryVolConfirm:EntryMeanRev ...  (o --auto para top-N por PF)
 """
 import argparse
 import json

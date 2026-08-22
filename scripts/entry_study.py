@@ -13,12 +13,6 @@ VARIANTS (ver strategies/entry_study.py) — ESTUDIO CANONICO Fase B (6 senales 
   EntryVolConfirm: EMA20>EMA50 + volumen > 1.5x media
   EntryMeanRev   : RSI<30 en rango (contra-tendencia, contraste)
 
-NOTA FORENSE: `EntryV9Style` (estilo de entrada del bot v9) fue anadida a peticion
- del usuario (03:46 UTC) para cerrar una duda, y queda FUERA del estudio canonico.
- No forma parte de la busqueda de edge del proyecto. Si se quiere re-ejecutar como
- curiosidad, usar FORENSIC_VARIANTS = ["EntryV9Style"] y un backtest aparte; el
- resultado ya esta en results/entrystudy_v9style.json (casi inerte: 5 trades/5 anos, PF 0.0).
-
 Metodo OOS: 5 ventanas anuales (2021-2025), 9 pares, sizing fijo 100 USDT,
 fees 0.001. Sin fitting en IS -> todo OOS por construccion (evita overfit).
 
@@ -35,7 +29,6 @@ DATADIR = "/opt/freqtrade/user_data/data/coinbase"
 CONFIG = "/opt/freqtrade/user_data/configs/backtest_entrystudy.json"
 VARIANTS = ["EntryTrend", "EntryTrendADX", "EntryBreakout",
             "EntryPullback", "EntryVolConfirm", "EntryMeanRev"]
-# FORENSIC_VARIANTS = ["EntryV9Style"]  # fuera del estudio canonico (ver nota arriba)
 RESULTS_DIR = "/opt/freqtrade/user_data/backtest_results"
 YEARS = [2021, 2022, 2023, 2024, 2025]
 GATE_PF = 1.5
