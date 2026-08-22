@@ -13,4 +13,6 @@ Registro de cambios del repositorio (criterio PROJECT.md §8.2: memoria auditabl
 - **Buenas prácticas**: `requirements.txt`, `CHANGELOG.md`, `tests/test_repo_integrity.py` (5 tests OK).
 - **README fiel a la realidad**: corregida la sección de estructura (sin `data/` ficticia; refleja STATUS/CHANGELOG/requirements/tests).
 - **FIX push bug**: se eliminó la necesidad de escribir el token en la URL. Configurado `credential.helper=store` (token en `/root/.git-creds-trading-research`, fuera del repo, permisos 600). `git push` ahora autentica solo; el remote queda limpio y el placeholder `***` desaparece. Verificado con `git ls-remote` (exit 0).
+- **Fase A.2**: `strategies/baseline_trend.py` + `configs/backtest_baseline.json`. Backtest valida el harness OOS. Baseline = línea base (PF negativo), no edge.
+- **Fase A.3**: `scripts/walkforward.py` (orquestador) + `configs/backtest_walkforward.json` + `results/walkforward_A3.json`. Walk-forward 2021-2025, sizing 100 USDT, sin fitting. **0 pares pasan el gate PF≥1.5** (PF 0.28-0.40). Baseline rechazada; fases B/C/D deben buscar el edge.
 - **Buenas prácticas**: `requirements.txt`, este `CHANGELOG.md`, CI (`.github/workflows/ci.yml`), `tests/test_repo_integrity.py`.

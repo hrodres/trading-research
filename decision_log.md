@@ -68,3 +68,21 @@ Registro auditable de decisiones y su justificación. (Criterio del PROJECT.md: 
 
 **Siguiente:** A.3 (walk-forward OOS por par con sizing 1-2% y validation fuera de muestra; aquí se decide el universo por datos, gate PF ≥ 1.5 OOS).
 
+---
+
+## 2026-08-22 — Fase A.3: Walk-forward OOS por par (resultado)
+
+**Método:** 5 backtests anuales (2021-2025), los 9 pares a la vez (`max_open_trades=9`), `stake_amount=100` USDT fijo (**sizing acotado**, sin compuesto agresivo), fees 1.2%. Export trades por año y agrupado por par. Sin fitting en IS -> todo es OOS valido por construccion (evita overfit). Orquestador: `scripts/walkforward.py` (lee el zip auto-nombrado de freqtrade 2026.7 via `.last_result.json`).
+
+**Resultado (PF agregado 2021-2025 por par):**
+- SOL 0.395 (n=563, win 62.3%) | XRP 0.372 (244, 54.9%) | AVAX 0.346 (494, 60.5%)
+- LINK 0.343 (424, 57.1%) | DOGE 0.340 (549, 57.4%) | ADA 0.332 (394, 54.1%)
+- DOT 0.311 (454, 55.3%) | ETH 0.299 (408, 48.8%) | BTC 0.276 (335, 40.9%)
+- **Pares que pasan el gate (PF>=1.5, n>=30, 4+yr): NINGUNO.**
+
+**Conclusion honesta:** la estrategia baseline (tendencia EMA20>EMA50, SL -10%, TP +8%) **NO tiene edge** — PF ~0.3 en todos los pares (pierde ~2 de cada 3 USD que gana). El win rate alto (55-62%) engana: TP asimetrico (+8% cap) vs SL (-10% + fees) hace que cada win promedio < cada loss. BTC es el peor (PF 0.276, win 40.9%): la senal "compra alto, corta gains, SL en pullbacks" destruye P&L sistematicamente.
+
+**Esto NO es fallo del harness** (que funciona y es reproducible) ni del proyecto. Es la medida honesta que las fases B/C/D deben superar. A.3 cumplio su objetivo: medir fuera de muestra sin overfit.
+
+**Siguiente:** B (senal de entrada: regime detection, breakout, pullback, volumen) y C (exits: TP fijo vs trailing vs tiempo) para buscar donde SI hay edge. No se elige universo de pares todavia (seleccion data-driven tras OOS, segun PROJECT.md §8.1).
+

@@ -17,7 +17,7 @@
 ## Fase A — Cimientos de medida (obligatoria)
 - ✅ **A.1 — Screening de pares** (correlación por fecha + liquidez USDT). Ejecutado 2026-08-22. Resultados en `decision_log.md`. Corr 0.58–0.80, BTC↔ETH 0.80, 0 redundantes. Caveats: XRP fuera del gate 4+ años; liquidez fina en DOT/LINK/AVAX/ADA.
 - ✅ **A.2 — Estrategia baseline** (`strategies/baseline_trend.py` + `configs/backtest_baseline.json`). Backtest corre = harness OOS validado. Resultado honesto: PF negativo (baseline de referencia, no edge). Detalles en `decision_log.md`.
-- ⬜ **A.3 — Walk-forward OOS por par** (fees + slippage + sizing acotado 1-2%, validation fuera de muestra). Aquí se decide el universo por datos (gate PF ≥ 1.5 OOS).
+- ✅ **A.3 — Walk-forward OOS por par** (2021-2025, sizing 100 USDT, sin fitting). Ejecutado 2026-08-22. Orquestador `scripts/walkforward.py` + `configs/backtest_walkforward.json`. **Resultado: 0 pares pasan el gate** (PF 0.28-0.40 en todos). La baseline NO tiene edge. Detalles en `decision_log.md` + `results/walkforward_A3.json`.
 - ✅ **A.4 — Documentación** en `decision_log.md` + `STATUS.md` + push.
 
 ## Fase B — Señal de entrada

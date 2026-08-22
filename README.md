@@ -30,11 +30,16 @@ Proyecto de I&D de trading cuantitativo en crypto: usa **freqtrade** como andami
 ```
 trading-research/
 ├── scripts/
-│   └── screening.py          # Fase A.1: correlación + liquidez por par (Coinbase 2h)
+│   ├── screening.py          # Fase A.1: correlación + liquidez por par (Coinbase 2h)
+│   ├── walkforward.py         # Fase A.3: walk-forward OOS por par (freqtrade harness)
+│   └── inspect_export.py      # util: inspecciona estructura del export de freqtrade 2026.7
 ├── strategies/
 │   └── baseline_trend.py     # Fase A.2: estrategia baseline tendencia/momentum
 ├── configs/
-│   └── backtest_baseline.json  # config freqtrade para backtest (Fase A.2)
+│   ├── backtest_baseline.json    # config backtest A.2
+│   └── backtest_walkforward.json # config walk-forward A.3 (sizing 100 USDT)
+├── results/
+│   └── walkforward_A3.json   # resultado A.3 (PF por par 2021-2025)
 ├── tests/
 │   └── test_repo_integrity.py  # CI local: estructura, compilación, sin secretos
 ├── PROJECT.md                # propósito, fases, guardarraíles
