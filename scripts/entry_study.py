@@ -28,7 +28,7 @@ USERDIR = "/opt/freqtrade/user_data"
 DATADIR = "/opt/freqtrade/user_data/data/coinbase"
 CONFIG = "/opt/freqtrade/user_data/configs/backtest_entrystudy.json"
 VARIANTS = ["EntryTrend", "EntryTrendADX", "EntryBreakout",
-            "EntryPullback", "EntryVolConfirm", "EntryMeanRev"]
+            "EntryPullback", "EntryVolConfirm", "EntryMeanRev", "EntryV9Style"]
 RESULTS_DIR = "/opt/freqtrade/user_data/backtest_results"
 YEARS = [2021, 2022, 2023, 2024, 2025]
 GATE_PF = 1.5
